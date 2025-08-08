@@ -26,7 +26,7 @@ export const FeedbackSection = () => {
     setTimeout(() => {
       toast({
         title: "Thank you for your feedback! 🎉",
-        description: "Your feedback helps us improve the AI Knowledge Hub.",
+        description: "Your feedback helps us improve NeuralFlow.",
         duration: 5000,
       });
       
@@ -54,7 +54,7 @@ export const FeedbackSection = () => {
             <h2 className="text-3xl md:text-4xl font-bold">Your Feedback Matters</h2>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Help us improve the AI Knowledge Hub. Share your thoughts, suggestions, 
+            Help us improve NeuralFlow. Share your thoughts, suggestions, 
             or report any issues you've encountered.
           </p>
         </div>
