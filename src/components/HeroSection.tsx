@@ -17,11 +17,11 @@ export const HeroSection = () => {
       <div className="absolute bottom-20 right-20 w-96 h-96 bg-ai-cyan/20 rounded-full blur-3xl" />
       
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
-          AI Knowledge Hub
+        <h1 className="text-5xl md:text-7xl font-bold bg-gradient-accent bg-clip-text text-transparent mb-6 animate-fade-in">
+          NeuralFlow
         </h1>
         <p className="text-xl md:text-2xl text-white/90 mb-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          For Product Managers
+          AI Intelligence for Product Leaders
         </p>
         <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '0.4s' }}>
           Stay updated with AI trends, learn technical terms simplified, 

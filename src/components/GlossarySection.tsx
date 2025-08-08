@@ -79,7 +79,15 @@ const difficultyColors = {
 export const GlossarySection = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTerm, setSelectedTerm] = useState<GlossaryTerm | null>(null);
-  const [featuredTerm] = useState(mockTerms.find(term => term.is_featured) || mockTerms[0]);
+  
+  // Daily rotation logic - changes featured term based on day of year
+  const getDailyFeaturedTerm = () => {
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
+    const termIndex = dayOfYear % mockTerms.length;
+    return mockTerms[termIndex];
+  };
+  
+  const [featuredTerm] = useState(getDailyFeaturedTerm());
 
   const filteredTerms = mockTerms.filter(term =>
     term.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
