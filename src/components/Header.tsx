@@ -17,7 +17,7 @@ export const Header = () => {
             <Brain className="w-5 h-5 text-white" />
           </div>
           <h1 className="text-xl font-bold bg-gradient-accent bg-clip-text text-transparent">
-            NeuralFlow
+            Promptly
           </h1>
         </div>
         
@@ -28,7 +28,7 @@ export const Header = () => {
             className="text-sm font-medium hover:text-primary"
           >
             <Zap className="w-4 h-4 mr-2" />
-            Daily News
+            Daily nuggets
           </Button>
           <Button 
             variant="ghost"
@@ -36,7 +36,7 @@ export const Header = () => {
             className="text-sm font-medium hover:text-primary"
           >
             <BookOpen className="w-4 h-4 mr-2" />
-            Glossary
+            Jargon buster
           </Button>
           <Button 
             variant="ghost"
@@ -44,7 +44,7 @@ export const Header = () => {
             className="text-sm font-medium hover:text-primary"
           >
             <Brain className="w-4 h-4 mr-2" />
-            AI Models
+            Model finder
           </Button>
           <Button 
             variant="ghost"

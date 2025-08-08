@@ -126,7 +126,7 @@ export const DailyNewsSection = () => {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-4">
             <Zap className="w-8 h-8 text-primary mr-3" />
-            <h2 className="text-3xl md:text-4xl font-bold">AI Intelligence Feed</h2>
+            <h2 className="text-3xl md:text-4xl font-bold">Daily nuggets</h2>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Latest AI developments with PM-focused insights. 

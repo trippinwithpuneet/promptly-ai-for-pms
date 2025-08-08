@@ -112,7 +112,7 @@ export const ModelRecommenderSection = () => {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-4">
             <Brain className="w-8 h-8 text-primary mr-3" />
-            <h2 className="text-3xl md:text-4xl font-bold">AI Model Finder</h2>
+            <h2 className="text-3xl md:text-4xl font-bold">Model finder</h2>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Tell us your use case and get personalized AI model recommendations 

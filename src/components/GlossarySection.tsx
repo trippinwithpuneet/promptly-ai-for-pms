@@ -101,7 +101,7 @@ export const GlossarySection = () => {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-4">
             <BookOpen className="w-8 h-8 text-primary mr-3" />
-            <h2 className="text-3xl md:text-4xl font-bold">AI Glossary</h2>
+            <h2 className="text-3xl md:text-4xl font-bold">Jargon buster</h2>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Learn AI terminology explained like you're 5. From basic concepts to advanced topics, 

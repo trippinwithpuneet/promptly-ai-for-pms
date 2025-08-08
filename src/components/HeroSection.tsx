@@ -18,7 +18,7 @@ export const HeroSection = () => {
       
       <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
         <h1 className="text-5xl md:text-7xl font-bold bg-gradient-accent bg-clip-text text-transparent mb-6 animate-fade-in">
-          NeuralFlow
+          Promptly
         </h1>
         <p className="text-xl md:text-2xl text-white/90 mb-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
           AI Intelligence for Product Leaders
