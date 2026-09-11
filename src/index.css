@@ -2,65 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-/* NeuralFlow Design System - Premium dark theme for AI professionals */
+/* Promptly design system — obsidian, ivory and electric lime */
 
 @layer base {
   :root {
-    /* Core brand colors - Dark premium theme */
-    --background: 0 0% 7%;
-    --foreground: 0 0% 95%;
+    --background: 90 11% 4%;
+    --foreground: 68 26% 89%;
     
-    /* Brand primary - Premium electric blue */
-    --primary: 205 100% 65%;
-    --primary-light: 205 85% 75%;
-    --primary-dark: 205 100% 55%;
-    --primary-foreground: 0 0% 98%;
+    --primary: 79 87% 59%;
+    --primary-light: 79 90% 70%;
+    --primary-dark: 79 72% 45%;
+    --primary-foreground: 90 11% 4%;
     
-    /* AI-themed accent colors - Enhanced for dark theme */
-    --ai-purple: 280 100% 70%;
-    --ai-cyan: 180 100% 65%;
-    --ai-emerald: 150 85% 60%;
-    --ai-gold: 45 100% 60%;
+    --ai-purple: 68 26% 89%;
+    --ai-cyan: 79 87% 59%;
+    --ai-emerald: 142 45% 56%;
+    --ai-gold: 48 85% 62%;
     
     /* Premium gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--ai-purple)));
-    --gradient-hero: linear-gradient(135deg, hsl(0 0% 7%) 0%, hsl(220 30% 12%) 40%, hsl(var(--primary) / 0.2) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 10%) 0%, hsl(220 20% 8%) 100%);
-    --gradient-accent: linear-gradient(90deg, hsl(var(--ai-purple)) 0%, hsl(var(--ai-cyan)) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+    --gradient-hero: linear-gradient(145deg, hsl(var(--background)) 0%, hsl(var(--card)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--background)) 100%);
+    --gradient-accent: linear-gradient(90deg, hsl(var(--foreground)) 0%, hsl(var(--primary)) 100%);
     
-    --card: 0 0% 10%;
-    --card-foreground: 0 0% 95%;
+    --card: 72 13% 9%;
+    --card-foreground: 68 26% 89%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 72 13% 9%;
+    --popover-foreground: 68 26% 89%;
 
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary: 72 11% 14%;
+    --secondary-foreground: 68 26% 89%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 72 10% 12%;
+    --muted-foreground: 70 9% 62%;
 
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 95%;
+    --accent: 79 87% 59%;
+    --accent-foreground: 90 11% 4%;
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 15%;
+    --border: 70 10% 20%;
+    --input: 72 11% 14%;
     --ring: hsl(var(--primary));
     
     /* Success and info colors - Dark theme optimized */
     --success: 150 65% 50%;
     --success-foreground: 0 0% 98%;
     
-    --info: 205 100% 15%;
-    --info-foreground: 205 100% 80%;
+    --info: 79 45% 16%;
+    --info-foreground: 79 87% 70%;
     
     /* Premium shadows and effects */
     --shadow-subtle: 0 2px 8px 0 hsl(0 0% 0% / 0.3);
     --shadow-card: 0 20px 50px -12px hsl(0 0% 0% / 0.4), 0 8px 16px -4px hsl(0 0% 0% / 0.3);
-    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.5), 0 0 60px hsl(var(--primary) / 0.2);
+    --shadow-glow: 0 0 24px hsl(var(--primary) / 0.16), 0 0 54px hsl(var(--primary) / 0.08);
 
     --radius: 0.5rem;
 
@@ -127,5 +124,40 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Hind", sans-serif;
+    letter-spacing: 0;
+    background-image: linear-gradient(hsl(var(--foreground) / 0.025) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground) / 0.025) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: "Archivo Black", sans-serif;
+    letter-spacing: 0;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.35);
+    color: hsl(var(--foreground));
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }

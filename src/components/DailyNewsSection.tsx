@@ -119,29 +119,28 @@ export const DailyNewsSection = () => {
     setExpandedDetails((prev) => ({ ...prev, [section]: !prev[section] }));
 
   return (
-    <section id="news" className="py-16 bg-background">
+    <section id="news" className="border-b border-border/70 bg-background py-20 md:py-28">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-10">
-          <div className="flex items-center justify-center mb-4">
-            <Zap className="w-8 h-8 text-primary mr-3" />
-            <h2 className="text-3xl md:text-4xl font-bold">Daily nuggets</h2>
+        <div className="mb-10 grid gap-6 border-b border-border pb-10 md:grid-cols-[1fr_auto] md:items-end">
+          <div>
+            <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
+              <Zap className="h-4 w-4" />
+              Section 01 / Fresh signal
+            </div>
+            <h2 className="text-4xl uppercase md:text-6xl">Daily nuggets</h2>
+            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+              Real AI news from trusted sources — one story at a time, translated for product managers.
+            </p>
           </div>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Real AI news from OpenAI, Google, DeepMind, TechCrunch, VentureBeat and MIT Technology
-            Review — one story at a time, explained for product managers.
-          </p>
-        </div>
-
-        <div className="max-w-4xl mx-auto mb-6 flex flex-wrap items-center justify-center gap-3">
           <Button variant="outline" onClick={() => refreshNews()} disabled={refreshing}>
             <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
             {refreshing ? "Fetching latest news…" : "Get today's news"}
           </Button>
         </div>
 
-        <div className="max-w-4xl mx-auto mb-8">
+        <div className="mx-auto mb-8 max-w-5xl">
           {loading ? (
-            <Card className="bg-card border border-border shadow-card">
+            <Card className="overflow-hidden border-border bg-card shadow-card">
               <CardContent className="p-6 space-y-4">
                 <Skeleton className="h-6 w-3/4" />
                 <Skeleton className="h-4 w-full" />
@@ -164,7 +163,7 @@ export const DailyNewsSection = () => {
             </Card>
           ) : (
             <Card className="bg-card border border-border shadow-card">
-              <div className="flex items-start gap-4 p-4 border-b border-border">
+              <div className="flex items-start gap-4 border-b border-border p-6 md:p-8">
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-2 mb-2">
                     <Badge variant="outline" className="text-xs">
@@ -187,12 +186,12 @@ export const DailyNewsSection = () => {
                       )
                     )}
                   </div>
-                  <h3 className="text-xl font-bold leading-tight">{currentNews.title}</h3>
+                  <h3 className="max-w-4xl text-2xl leading-tight md:text-4xl">{currentNews.title}</h3>
                 </div>
               </div>
 
-              <CardContent className="p-6">
-                <p className="text-muted-foreground mb-6">{currentNews.summary}</p>
+              <CardContent className="p-6 md:p-8">
+                <p className="mb-8 max-w-3xl text-lg leading-relaxed text-muted-foreground">{currentNews.summary}</p>
 
                 {currentNews.simple_explanation && (
                   <div className="bg-info/10 border border-info/20 rounded-lg p-4 mb-4">
