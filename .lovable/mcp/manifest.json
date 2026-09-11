@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "sdk_version": "2.0.4",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "promptly-ai-for-pms",
+      "version": "0.1.0",
+      "title": "promptly-ai-for-pms"
+    },
+    "tools": [
+      {
+        "name": "latest_ai_nuggets",
+        "title": "Latest AI nuggets",
+        "description": "Get Promptly's latest public AI news, simplified for product managers.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "default": 5,
+              "description": "Number of stories to return.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "explain_ai_jargon",
+        "title": "Explain AI jargon",
+        "description": "Explain an AI term simply, including benefits, drawbacks, and alternatives.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "description": "The AI term or phrase to explain."
+            }
+          },
+          "required": [
+            "query"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "find_ai_models",
+        "title": "Find AI models",
+        "description": "Recommend AI models for a product use case with pricing, strengths, and limitations.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "useCase": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 1000,
+              "description": "What the product manager wants AI to do."
+            }
+          },
+          "required": [
+            "useCase"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
