@@ -67,6 +67,102 @@ const mockTerms: GlossaryTerm[] = [
     category: "Data Management",
     difficulty_level: "intermediate",
     is_featured: false
+  },
+  {
+    id: "5",
+    term: "RAG (Retrieval-Augmented Generation)",
+    simple_explanation: "Letting AI look up trusted information before it answers, like giving it an open-book test.",
+    detailed_explanation: "RAG connects an AI model to a searchable knowledge source so it can retrieve relevant facts before generating a response.",
+    benefits: "More accurate answers, easier knowledge updates, better use of company information",
+    drawbacks: "Quality depends on the source material and search setup",
+    alternatives: "Fine-tuning, long-context prompts, manual knowledge bases",
+    category: "AI Architecture",
+    difficulty_level: "intermediate",
+    is_featured: false
+  },
+  {
+    id: "6",
+    term: "Hallucination",
+    simple_explanation: "When an AI confidently makes up an answer that sounds believable but is not true.",
+    detailed_explanation: "A hallucination is generated information that is unsupported by the model's inputs or reliable evidence.",
+    benefits: "None directly, but tracking it helps teams measure answer reliability",
+    drawbacks: "Can mislead users and reduce trust",
+    alternatives: "RAG, citations, human review, constrained responses",
+    category: "AI Quality",
+    difficulty_level: "beginner",
+    is_featured: false
+  },
+  {
+    id: "7",
+    term: "Tokens",
+    simple_explanation: "The small pieces of text an AI reads and writes—roughly parts of words rather than whole sentences.",
+    detailed_explanation: "Models break text into tokens for processing, and providers commonly use token counts for limits and pricing.",
+    benefits: "Makes model usage measurable and supports flexible text processing",
+    drawbacks: "Token counts are not intuitive and vary by language and model",
+    alternatives: "Character limits, word limits, request-based pricing",
+    category: "AI Basics",
+    difficulty_level: "beginner",
+    is_featured: false
+  },
+  {
+    id: "8",
+    term: "Fine-tuning",
+    simple_explanation: "Giving an existing AI extra training so it becomes better at one specific kind of job.",
+    detailed_explanation: "Fine-tuning updates a pre-trained model using curated examples to improve its behavior for a narrower task or style.",
+    benefits: "More consistent outputs, specialized behavior, shorter prompts",
+    drawbacks: "Needs good training data, costs more, and requires ongoing evaluation",
+    alternatives: "Prompt engineering, RAG, few-shot examples",
+    category: "Model Customization",
+    difficulty_level: "intermediate",
+    is_featured: false
+  },
+  {
+    id: "9",
+    term: "Embeddings",
+    simple_explanation: "A way to turn meaning into numbers so AI can spot which pieces of information are similar.",
+    detailed_explanation: "Embeddings represent content as numeric vectors, allowing systems to compare meaning and retrieve related items.",
+    benefits: "Powers semantic search, recommendations, clustering, and RAG",
+    drawbacks: "Requires storage and does not explain why items are considered similar",
+    alternatives: "Keyword search, rules-based matching, metadata filters",
+    category: "Data Management",
+    difficulty_level: "intermediate",
+    is_featured: false
+  },
+  {
+    id: "10",
+    term: "Context Window",
+    simple_explanation: "The amount of information an AI can keep in mind during one conversation.",
+    detailed_explanation: "A context window is the maximum number of tokens a model can process together in a single request.",
+    benefits: "Larger windows can handle longer documents and conversations",
+    drawbacks: "More context can increase cost and still does not guarantee better attention",
+    alternatives: "Summarization, RAG, conversation memory",
+    category: "AI Basics",
+    difficulty_level: "beginner",
+    is_featured: false
+  },
+  {
+    id: "11",
+    term: "AI Agent",
+    simple_explanation: "An AI that can choose steps and use tools to complete a goal instead of only answering once.",
+    detailed_explanation: "AI agents combine a model with instructions, memory, and tools to plan and carry out multi-step tasks.",
+    benefits: "Automates workflows and handles tasks that need several decisions",
+    drawbacks: "Harder to predict, test, and control than a simple chatbot",
+    alternatives: "Fixed workflows, rule engines, standard chatbots",
+    category: "AI Architecture",
+    difficulty_level: "intermediate",
+    is_featured: false
+  },
+  {
+    id: "12",
+    term: "Guardrails",
+    simple_explanation: "Rules and checks that keep an AI from giving unsafe, irrelevant, or unwanted answers.",
+    detailed_explanation: "Guardrails validate model inputs and outputs against safety, policy, quality, and business requirements.",
+    benefits: "Improves safety, consistency, and compliance",
+    drawbacks: "Can block useful answers and needs continuous tuning",
+    alternatives: "Human moderation, strict prompts, limited model access",
+    category: "AI Safety",
+    difficulty_level: "beginner",
+    is_featured: false
   }
 ];
 
@@ -79,6 +175,23 @@ const difficultyColors = {
 export const GlossarySection = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTerm, setSelectedTerm] = useState<GlossaryTerm | null>(null);
+
+  const getTermsForVisit = () => {
+    const storageKey = "promptly-last-glossary-terms";
+
+    try {
+      const previousIds = new Set(JSON.parse(window.localStorage.getItem(storageKey) ?? "[]") as string[]);
+      const shuffled = [...mockTerms].sort(() => Math.random() - 0.5);
+      const changedTerms = shuffled.filter((term) => !previousIds.has(term.id));
+      const nextTerms = [...changedTerms, ...shuffled.filter((term) => previousIds.has(term.id))].slice(0, 4);
+      window.localStorage.setItem(storageKey, JSON.stringify(nextTerms.map((term) => term.id)));
+      return nextTerms;
+    } catch {
+      return [...mockTerms].sort(() => Math.random() - 0.5).slice(0, 4);
+    }
+  };
+
+  const [termsForVisit] = useState(getTermsForVisit);
   
   const getFeaturedTermForVisit = () => {
     const storageKey = "promptly-last-featured-term";
@@ -99,7 +212,8 @@ export const GlossarySection = () => {
   
   const [featuredTerm] = useState(getFeaturedTermForVisit);
 
-  const filteredTerms = mockTerms.filter(term =>
+  const termsToSearch = searchTerm.trim() ? mockTerms : termsForVisit;
+  const filteredTerms = termsToSearch.filter(term =>
     term.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
     term.simple_explanation.toLowerCase().includes(searchTerm.toLowerCase()) ||
     term.category?.toLowerCase().includes(searchTerm.toLowerCase())
