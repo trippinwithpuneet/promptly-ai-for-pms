@@ -72,7 +72,7 @@ const mockTerms: GlossaryTerm[] = [
 
 const difficultyColors = {
   beginner: "bg-success/20 text-success-foreground",
-  intermediate: "bg-primary/20 text-primary-foreground", 
+  intermediate: "border border-primary/60 bg-primary text-primary-foreground",
   advanced: "bg-destructive/20 text-destructive-foreground"
 };
 
