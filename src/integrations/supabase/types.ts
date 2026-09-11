@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      feedback: {
+        Row: {
+          created_at: string
+          email: string | null
+          feedback: string
+          id: string
+          name: string
+          rating: number | null
+          section: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          feedback: string
+          id?: string
+          name: string
+          rating?: number | null
+          section?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          feedback?: string
+          id?: string
+          name?: string
+          rating?: number | null
+          section?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       news_items: {
         Row: {
           created_at: string
