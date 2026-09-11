@@ -11,7 +11,6 @@ export const HeroSection = () => {
 
   return (
     <section className="relative flex min-h-[58vh] items-center overflow-hidden border-b border-border/70 bg-gradient-hero">
-      <div className="absolute inset-y-0 left-[9%] hidden w-px bg-primary/30 md:block" />
       <div className="container relative z-10 mx-auto py-20 md:py-24">
         <div className="mb-6 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
           <Sparkles className="h-4 w-4" />
