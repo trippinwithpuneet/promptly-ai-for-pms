@@ -3,7 +3,7 @@ import { ArrowDown, Sparkles } from "lucide-react";
 
 export const HeroSection = () => {
   const scrollToContent = () => {
-    const element = document.getElementById('glossary');
+    const element = document.getElementById('course');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
@@ -28,7 +28,7 @@ export const HeroSection = () => {
             onClick={scrollToContent}
             className="h-12 px-6 text-base font-semibold shadow-glow"
           >
-            Start with Jargon Buster
+            Start AI 101 for PMs
             <ArrowDown className="ml-2 h-4 w-4" />
           </Button>
           <p className="text-sm text-muted-foreground">
