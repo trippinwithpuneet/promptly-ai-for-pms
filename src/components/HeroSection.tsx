@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown, Sparkles } from "lucide-react";
 
 export const HeroSection = () => {
   const scrollToContent = () => {
@@ -10,42 +10,31 @@ export const HeroSection = () => {
   };
 
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center bg-gradient-hero overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:60px_60px]" />
-      <div className="absolute top-20 left-20 w-72 h-72 bg-ai-purple/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-ai-cyan/20 rounded-full blur-3xl" />
-      
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-        <h1 className="text-5xl md:text-7xl font-bold bg-gradient-accent bg-clip-text text-transparent mb-6 animate-fade-in">
-          Promptly
+    <section className="relative flex min-h-[58vh] items-center overflow-hidden border-b border-border/70 bg-gradient-hero">
+      <div className="absolute inset-y-0 left-[9%] hidden w-px bg-primary/30 md:block" />
+      <div className="container relative z-10 mx-auto py-20 md:py-24">
+        <div className="mb-6 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
+          <Sparkles className="h-4 w-4" />
+          AI, decoded for product people
+        </div>
+        <h1 className="max-w-5xl text-5xl uppercase leading-[0.95] text-foreground md:text-7xl lg:text-8xl">
+          Less jargon.<br /><span className="text-primary">More signal.</span>
         </h1>
-        <p className="text-xl md:text-2xl text-white/90 mb-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-          AI Intelligence for Product Leaders
+        <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
+          Daily AI news, plain-English concepts, and practical model choices for product managers.
         </p>
-        <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          Stay updated with AI trends, learn technical terms simplified, 
-          and discover the best AI models for your use cases - all in one place.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
+        <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
           <Button 
             size="lg" 
             onClick={scrollToContent}
-            className="bg-white text-primary hover:bg-white/90 shadow-lg px-8 py-3 text-lg font-semibold"
+            className="h-12 px-6 text-base font-semibold shadow-glow"
           >
-            Explore Knowledge Hub
+            Read today's nuggets
+            <ArrowDown className="ml-2 h-4 w-4" />
           </Button>
-          <p className="text-white/70 text-sm">
-            Built for PMs at fast-growing startups
+          <p className="text-sm text-muted-foreground">
+            Curated for fast-moving product teams
           </p>
-        </div>
-        
-        <div className="mt-16 animate-bounce">
-          <ChevronDown 
-            className="w-8 h-8 text-white/60 mx-auto cursor-pointer hover:text-white/80 transition-colors" 
-            onClick={scrollToContent}
-          />
         </div>
       </div>
     </section>

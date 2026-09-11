@@ -46,21 +46,21 @@ export const FeedbackSection = () => {
   };
 
   return (
-    <section id="feedback" className="py-16 bg-muted/30">
+    <section id="feedback" className="bg-muted/30 py-20 md:py-28">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-4">
-            <MessageCircle className="w-8 h-8 text-primary mr-3" />
-            <h2 className="text-3xl md:text-4xl font-bold">Your Feedback Matters</h2>
+        <div className="mb-12 max-w-3xl">
+          <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
+            <MessageCircle className="h-4 w-4" />
+            Help shape Promptly
           </div>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Help us improve Promptly. Share your thoughts, suggestions, 
-            or report any issues you've encountered.
+          <h2 className="text-4xl uppercase md:text-6xl">Your feedback matters</h2>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+            Share what was useful, what was unclear, or what you want Promptly to cover next.
           </p>
         </div>
 
         <div className="max-w-2xl mx-auto">
-          <Card className="shadow-card">
+          <Card className="border-border bg-card shadow-card">
             <CardHeader>
               <CardTitle>Share Your Feedback</CardTitle>
               <CardDescription>
@@ -75,21 +75,24 @@ export const FeedbackSection = () => {
                   <Label className="text-sm font-medium">Overall Rating</Label>
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <button
+                      <Button
                         key={star}
                         type="button"
+                        variant="ghost"
+                        size="icon"
+                        aria-label={`Rate ${star} out of 5`}
                         onClick={() => handleRating(star)}
-                        className={`p-1 rounded transition-colors ${
+                        className={`h-9 w-9 transition-colors ${
                           star <= formData.rating
-                            ? 'text-yellow-400 hover:text-yellow-500'
-                            : 'text-muted-foreground hover:text-yellow-300'
+                              ? 'text-primary hover:text-primary/80'
+                              : 'text-muted-foreground hover:text-primary/70'
                         }`}
                       >
                         <Star 
                           className="w-6 h-6" 
                           fill={star <= formData.rating ? 'currentColor' : 'none'}
                         />
-                      </button>
+                      </Button>
                     ))}
                     {formData.rating > 0 && (
                       <span className="ml-2 text-sm text-muted-foreground">
@@ -133,7 +136,7 @@ export const FeedbackSection = () => {
                     id="section"
                     value={formData.section}
                     onChange={(e) => setFormData(prev => ({ ...prev, section: e.target.value }))}
-                    className="w-full px-3 py-2 border border-input bg-background rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                   >
                     <option value="">Select a section</option>
                     <option value="daily-news">Daily AI News</option>
@@ -165,7 +168,7 @@ export const FeedbackSection = () => {
                 >
                   {isSubmitting ? (
                     <>
-                      <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
                       Submitting...
                     </>
                   ) : (

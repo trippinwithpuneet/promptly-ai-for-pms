@@ -106,40 +106,40 @@ export const GlossarySection = () => {
   );
 
   return (
-    <section id="glossary" className="py-16 bg-muted/30">
+    <section id="glossary" className="border-b border-border/70 bg-muted/30 py-20 md:py-28">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-4">
-            <BookOpen className="w-8 h-8 text-primary mr-3" />
-            <h2 className="text-3xl md:text-4xl font-bold">Jargon buster</h2>
+        <div className="mb-12 max-w-3xl">
+          <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
+            <BookOpen className="h-4 w-4" />
+            Section 02 / Learn the language
           </div>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Learn AI terminology explained like you're 5. From basic concepts to advanced topics, 
-            all simplified for product managers.
+          <h2 className="text-4xl uppercase md:text-6xl">Jargon buster</h2>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+            AI terminology without the technical fog — explained simply, with practical trade-offs.
           </p>
         </div>
 
         {/* Word of the Day */}
         <div className="mb-12">
-          <Card className="bg-gradient-primary text-white shadow-glow border-0">
+          <Card className="border-primary/40 bg-primary text-primary-foreground shadow-glow">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Star className="w-5 h-5 text-yellow-300" />
-                  <span className="text-sm font-medium text-white/90">Word of the Day</span>
+                  <Star className="h-5 w-5" />
+                  <span className="text-sm font-semibold uppercase">Featured this visit</span>
                 </div>
-                <Badge className="bg-white/20 text-white border-white/30">
+                <Badge className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground">
                   {featuredTerm.difficulty_level}
                 </Badge>
               </div>
-              <CardTitle className="text-2xl">{featuredTerm.term}</CardTitle>
+              <CardTitle className="text-3xl uppercase">{featuredTerm.term}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-white/90 text-lg mb-4">{featuredTerm.simple_explanation}</p>
+              <p className="mb-5 max-w-3xl text-lg">{featuredTerm.simple_explanation}</p>
               <Button 
                 variant="secondary" 
                 onClick={() => setSelectedTerm(featuredTerm)}
-                className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                className="border border-primary-foreground/30 bg-primary-foreground text-primary hover:bg-primary-foreground/90"
               >
                 Learn More
                 <ChevronRight className="w-4 h-4 ml-2" />
@@ -150,7 +150,7 @@ export const GlossarySection = () => {
 
         {/* Search */}
         <div className="mb-8">
-          <div className="relative max-w-md mx-auto">
+          <div className="relative max-w-xl">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
               placeholder="Search AI terms..."
@@ -166,7 +166,7 @@ export const GlossarySection = () => {
           {filteredTerms.map((term) => (
             <Card 
               key={term.id}
-              className="cursor-pointer transition-all duration-300 hover:shadow-card hover:scale-105"
+              className="cursor-pointer border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-card"
               onClick={() => setSelectedTerm(term)}
             >
               <CardHeader>
@@ -194,7 +194,7 @@ export const GlossarySection = () => {
 
         {/* Term Detail Modal/Panel */}
         {selectedTerm && (
-          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 p-4 backdrop-blur-sm">
             <Card className="max-w-2xl w-full max-h-[90vh] overflow-auto animate-scale-in">
               <CardHeader>
                 <div className="flex items-start justify-between">
