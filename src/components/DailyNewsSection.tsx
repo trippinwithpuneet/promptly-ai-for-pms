@@ -6,7 +6,6 @@ import {
   Zap,
   ExternalLink,
   TrendingUp,
-  MessageCircle,
   DollarSign,
   Target,
   ChevronDown,
@@ -130,6 +129,10 @@ export const DailyNewsSection = () => {
             <h2 className="text-4xl uppercase md:text-6xl">Daily nuggets</h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
               Real AI news from trusted sources — one story at a time, translated for product managers.
+            </p>
+            <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground">Sources:</span>{" "}
+              OpenAI, Google AI, Google DeepMind, TechCrunch AI, VentureBeat AI, and MIT Technology Review.
             </p>
           </div>
           <Button variant="outline" onClick={() => refreshNews()} disabled={refreshing}>
@@ -283,26 +286,14 @@ export const DailyNewsSection = () => {
                   </div>
                 )}
 
-                <div className="flex items-center gap-4">
+                {currentNews.source_url && (
                   <Button variant="ghost" size="sm" asChild>
-                    <a
-                      href={`https://hn.algolia.com/?query=${encodeURIComponent(currentNews.title)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Discussion
+                    <a href={currentNews.source_url} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Source
                     </a>
                   </Button>
-                  {currentNews.source_url && (
-                    <Button variant="ghost" size="sm" asChild>
-                      <a href={currentNews.source_url} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Source
-                      </a>
-                    </Button>
-                  )}
-                </div>
+                )}
               </CardContent>
             </Card>
           )}
