@@ -35,7 +35,29 @@ type FinderOutput = z.infer<typeof recommendationSchema>;
 function recoverOutput(text: string): FinderOutput | null {
   try {
     const raw = JSON.parse(text) as Record<string, unknown>;
-    const recommendations = Array.isArray(raw.recommendations) ? raw.recommendations : [];
+    const recommendations = Array.isArray(raw.recommendations)
+      ? raw.recommendations.map((item) => {
+        const recommendation = item as Record<string, unknown>;
+        const accessType = String(recommendation.accessType ?? "paid");
+        const fitReason = String(recommendation.fitReason ?? "A practical fit for the described use case.");
+        const tradeOffs = String(recommendation.tradeOffs ?? "Validate quality and cost with your own examples.");
+        return {
+          modelName: String(recommendation.modelName ?? "AI model"),
+          provider: String(recommendation.provider ?? "Provider"),
+          modelType: String(recommendation.modelType ?? "General purpose"),
+          pricingType: String(recommendation.pricingType ?? accessType.split(/[ (]/)[0] ?? "paid"),
+          pricingDetails: String(recommendation.pricingDetails ?? recommendation.costEstimate ?? "Pricing varies by usage."),
+          fitReason,
+          strengths: Array.isArray(recommendation.strengths)
+            ? recommendation.strengths.map(String)
+            : [fitReason],
+          limitations: Array.isArray(recommendation.limitations)
+            ? recommendation.limitations.map(String)
+            : [tradeOffs],
+          nextStep: String(recommendation.nextStep ?? "Test it against a small set of real examples before committing."),
+        };
+      })
+      : [];
     return recommendationSchema.parse({
       ...raw,
       mode: raw.mode ?? (recommendations.length > 0 ? "recommendation" : "question"),
