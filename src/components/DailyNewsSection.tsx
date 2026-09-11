@@ -76,6 +76,7 @@ const mockNews: NewsItem[] = [
       ]
     },
     published_date: "2024-01-07",
+    source_url: "https://blog.google/technology/ai/google-gemini-ai/",
     is_featured: true,
     upvotes: 892,
     comments: 134
@@ -93,6 +94,7 @@ const mockNews: NewsItem[] = [
       "Voice data entry for mobile apps"
     ],
     published_date: "2024-01-06",
+    source_url: "https://www.artificialintelligence-news.com/",
     is_featured: false,
     upvotes: 456,
     comments: 67
@@ -254,9 +256,15 @@ export const DailyNewsSection = () => {
               {/* Actions */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <Button variant="ghost" size="sm">
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    {currentNews.comments} comments
+                  <Button variant="ghost" size="sm" asChild>
+                    <a
+                      href={`https://hn.algolia.com/?query=${encodeURIComponent(currentNews.title)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      {currentNews.comments} comments
+                    </a>
                   </Button>
                   {currentNews.source_url && (
                     <Button variant="ghost" size="sm" asChild>
