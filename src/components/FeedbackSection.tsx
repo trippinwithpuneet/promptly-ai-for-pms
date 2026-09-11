@@ -75,11 +75,14 @@ export const FeedbackSection = () => {
                   <Label className="text-sm font-medium">Overall Rating</Label>
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <button
+                      <Button
                         key={star}
                         type="button"
+                        variant="ghost"
+                        size="icon"
+                        aria-label={`Rate ${star} out of 5`}
                         onClick={() => handleRating(star)}
-                        className={`p-1 rounded transition-colors ${
+                        className={`h-9 w-9 transition-colors ${
                           star <= formData.rating
                               ? 'text-primary hover:text-primary/80'
                               : 'text-muted-foreground hover:text-primary/70'
@@ -89,7 +92,7 @@ export const FeedbackSection = () => {
                           className="w-6 h-6" 
                           fill={star <= formData.rating ? 'currentColor' : 'none'}
                         />
-                      </button>
+                      </Button>
                     ))}
                     {formData.rating > 0 && (
                       <span className="ml-2 text-sm text-muted-foreground">
