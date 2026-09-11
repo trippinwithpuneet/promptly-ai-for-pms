@@ -7,3 +7,4 @@
 - [x] Fix legacy accessibility findings in the glossary and feedback controls.
 - [x] Persist feedback submissions securely.
 - [ ] Complete Google Search Console setup (waiting for account connection and publish approval).
+- [ ] Add agent integrations (MCP) to expose Promptly’s useful public knowledge tools.
