@@ -14,7 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      news_items: {
+        Row: {
+          created_at: string
+          id: string
+          is_featured: boolean
+          is_user_submitted: boolean
+          pm_use_cases: string[]
+          pricing_comparison: Json | null
+          published_date: string
+          relevance_to_pm: string | null
+          simple_explanation: string | null
+          source_name: string | null
+          source_url: string | null
+          submitted_by: string | null
+          summary: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_featured?: boolean
+          is_user_submitted?: boolean
+          pm_use_cases?: string[]
+          pricing_comparison?: Json | null
+          published_date?: string
+          relevance_to_pm?: string | null
+          simple_explanation?: string | null
+          source_name?: string | null
+          source_url?: string | null
+          submitted_by?: string | null
+          summary: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_featured?: boolean
+          is_user_submitted?: boolean
+          pm_use_cases?: string[]
+          pricing_comparison?: Json | null
+          published_date?: string
+          relevance_to_pm?: string | null
+          simple_explanation?: string | null
+          source_name?: string | null
+          source_url?: string | null
+          submitted_by?: string | null
+          summary?: string
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
