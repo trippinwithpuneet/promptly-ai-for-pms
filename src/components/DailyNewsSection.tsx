@@ -53,7 +53,7 @@ export const DailyNewsSection = () => {
       .select("*")
       .order("published_date", { ascending: false })
       .order("created_at", { ascending: false })
-      .limit(30);
+      .limit(5);
 
     if (error) {
       toast({
@@ -128,7 +128,7 @@ export const DailyNewsSection = () => {
             </div>
             <h2 className="text-4xl uppercase md:text-6xl">Daily nuggets</h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              Real AI news from trusted sources — one story at a time, translated for product managers.
+               Five useful AI updates — one story at a time, curated for product managers.
             </p>
             <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
               <span className="font-semibold text-foreground">Sources:</span>{" "}
@@ -304,7 +304,7 @@ export const DailyNewsSection = () => {
                 ← Previous
               </Button>
               <div className="flex flex-wrap items-center justify-center gap-2">
-                {news.slice(0, 12).map((_, idx) => (
+                 {news.map((_, idx) => (
                   <Button
                     key={idx}
                     variant={idx === currentNewsIndex ? "default" : "outline"}

@@ -165,10 +165,10 @@ export const ModelRecommenderSection = () => {
                     className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`max-w-[88%] rounded-lg px-4 py-3 text-sm leading-relaxed md:max-w-[75%] ${
+                      className={`rounded-lg px-4 py-3 text-sm leading-relaxed ${
                         message.role === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "border border-border bg-muted text-foreground"
+                          ? "max-w-[88%] bg-primary text-primary-foreground md:max-w-[75%]"
+                          : "w-full border border-border bg-muted text-foreground"
                       }`}
                     >
                       <ReactMarkdown>{message.content}</ReactMarkdown>
