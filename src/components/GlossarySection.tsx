@@ -225,7 +225,7 @@ export const GlossarySection = () => {
         <div className="mb-12 max-w-3xl">
           <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
             <BookOpen className="h-4 w-4" />
-            Section 01 / Learn the language
+            Learn the language
           </div>
           <h2 className="text-4xl uppercase md:text-6xl">Jargon buster</h2>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -316,7 +316,7 @@ export const GlossarySection = () => {
             <div className="max-w-3xl">
               <div className="mb-5 inline-flex items-center gap-2 border border-primary-foreground/30 px-3 py-1 text-sm font-semibold uppercase">
                 <GraduationCap className="h-4 w-4" />
-                Section 02 / Free course for product managers
+                Free course for product managers
               </div>
               <h3 className="max-w-2xl text-4xl uppercase leading-tight md:text-6xl">Build your AI foundation</h3>
               <p className="mt-4 max-w-2xl text-lg text-primary-foreground/80 md:text-xl">

@@ -112,7 +112,7 @@ export const ModelRecommenderSection = () => {
         <div className="mb-12 max-w-3xl">
           <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
             <Brain className="h-4 w-4" />
-            Section 03 / Choose with confidence
+            Choose with confidence
           </div>
           <h2 className="text-4xl uppercase md:text-6xl">Model finder</h2>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
