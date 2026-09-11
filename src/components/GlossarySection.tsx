@@ -367,7 +367,7 @@ export const GlossarySection = () => {
                 <div className="bg-info/10 border border-info/20 rounded-lg p-4">
                   <div className="flex items-center mb-2">
                     <Lightbulb className="w-4 h-4 text-info-foreground mr-2" />
-                    <h4 className="font-semibold text-info-foreground">Simple Explanation</h4>
+                    <h4 className="font-semibold text-info-foreground">Explain like I’m 5</h4>
                   </div>
                   <p className="text-sm text-muted-foreground">{selectedTerm.simple_explanation}</p>
                 </div>
