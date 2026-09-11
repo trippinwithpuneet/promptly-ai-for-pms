@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { BookOpen, Zap, MessageCircle, ScanSearch, GraduationCap } from "lucide-react";
+import { BookOpen, Zap, ScanSearch, GraduationCap } from "lucide-react";
 import { BrandMark } from "@/components/BrandMark";
 
 export const Header = () => {
@@ -47,14 +47,6 @@ export const Header = () => {
           >
             <Zap className="w-4 h-4 mr-2" />
             Daily nuggets
-          </Button>
-          <Button 
-            variant="ghost"
-            onClick={() => scrollToSection('feedback')}
-            className="text-sm font-semibold text-muted-foreground hover:bg-primary/10 hover:text-primary"
-          >
-            <MessageCircle className="w-4 h-4 mr-2" />
-            Feedback
           </Button>
         </nav>
       </div>
