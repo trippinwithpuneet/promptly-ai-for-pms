@@ -355,6 +355,7 @@ export const GlossarySection = () => {
                   <Button 
                     variant="ghost" 
                     size="sm"
+                    aria-label="Close term details"
                     onClick={() => setSelectedTerm(null)}
                   >
                     ×
