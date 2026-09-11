@@ -258,7 +258,7 @@ export const DailyNewsSection = () => {
                 <div className="flex items-center gap-4">
                   <Button variant="ghost" size="sm" asChild>
                     <a
-                      href={`https://news.ycombinator.com/from?site=&q=${encodeURIComponent(currentNews.title)}`}
+                      href={`https://hn.algolia.com/?query=${encodeURIComponent(currentNews.title)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
