@@ -9,3 +9,4 @@
 - [ ] Complete Google Search Console setup (waiting for account connection and publish approval).
 - [x] Add agent integrations (MCP) to expose Promptly’s useful public knowledge tools.
 - [x] Reprioritize the homepage around Jargon Buster, AI 101, and Model Finder.
+- [x] Remove numbered labels from the homepage sections.
