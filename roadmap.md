@@ -12,3 +12,4 @@
 - [x] Remove numbered labels from the homepage sections.
 - [x] Make Model Finder a guided conversation with a three-answer limit.
 - [x] Curate Daily Nuggets to five practical, PM-focused stories and widen the Model Finder prompt.
+- [x] Move “Explain like I’m 5” from Daily Nuggets into glossary term details.

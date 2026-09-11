@@ -196,15 +196,6 @@ export const DailyNewsSection = () => {
               <CardContent className="p-6 md:p-8">
                 <p className="mb-8 max-w-3xl text-lg leading-relaxed text-muted-foreground">{currentNews.summary}</p>
 
-                {currentNews.simple_explanation && (
-                  <div className="bg-info/10 border border-info/20 rounded-lg p-4 mb-4">
-                    <h4 className="font-semibold text-info-foreground mb-2 flex items-center">
-                      💡 ELI5 (Explain Like I'm 5)
-                    </h4>
-                    <p className="text-sm text-muted-foreground">{currentNews.simple_explanation}</p>
-                  </div>
-                )}
-
                 {currentNews.pm_use_cases?.length > 0 && (
                   <div className="bg-success/10 border border-success/20 rounded-lg p-4 mb-4">
                     <Button
