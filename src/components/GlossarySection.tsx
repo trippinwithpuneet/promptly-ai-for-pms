@@ -298,7 +298,11 @@ export const GlossarySection = () => {
                 <CardDescription className="text-sm line-clamp-3">
                   {term.simple_explanation}
                 </CardDescription>
-                <Button variant="ghost" size="sm" className="mt-3 p-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="mt-3 h-auto p-0 text-foreground hover:bg-transparent hover:text-primary"
+                >
                   Learn more <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               </CardContent>
