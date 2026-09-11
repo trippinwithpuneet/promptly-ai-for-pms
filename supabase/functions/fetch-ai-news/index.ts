@@ -1,19 +1,30 @@
 // Fetches real AI news from reputable sources and enriches it for product managers.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 
 const FEEDS = [
+  { name: "TechCrunch AI", url: "https://techcrunch.com/category/artificial-intelligence/feed/" },
+  { name: "VentureBeat AI", url: "https://venturebeat.com/category/ai/feed/" },
   { name: "OpenAI", url: "https://openai.com/news/rss.xml" },
   { name: "Google AI", url: "https://blog.google/technology/ai/rss/" },
   { name: "Google DeepMind", url: "https://deepmind.google/blog/rss.xml" },
-  { name: "TechCrunch AI", url: "https://techcrunch.com/category/artificial-intelligence/feed/" },
-  { name: "VentureBeat AI", url: "https://venturebeat.com/category/ai/feed/" },
   { name: "MIT Technology Review", url: "https://www.technologyreview.com/topic/artificial-intelligence/feed" },
 ];
+
+const PM_SIGNALS = [
+  "launch", "release", "model", "api", "pricing", "price", "tier", "free", "paid",
+  "discontinue", "retire", "deprecated", "product", "app", "tool", "build", "customer",
+];
+
+const RESEARCH_SIGNALS = ["research paper", "study finds", "benchmark", "arxiv", "scientists", "researchers"];
+
+function pmRelevanceScore(item: RawItem): number {
+  const text = `${item.title} ${item.description}`.toLowerCase();
+  const sourceBonus = item.source === "TechCrunch AI" || item.source === "VentureBeat AI" ? 4 : 0;
+  const productScore = PM_SIGNALS.reduce((score, signal) => score + (text.includes(signal) ? 2 : 0), 0);
+  const researchPenalty = RESEARCH_SIGNALS.reduce((score, signal) => score + (text.includes(signal) ? 3 : 0), 0);
+  return sourceBonus + productScore - researchPenalty;
+}
 
 interface RawItem {
   title: string;
@@ -120,8 +131,8 @@ Deno.serve(async (req) => {
 
   try {
     const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
     );
 
     const feedResults = await Promise.all(FEEDS.map(parseFeed));
@@ -136,7 +147,10 @@ Deno.serve(async (req) => {
     // Skip stories already stored.
     const { data: existing } = await supabase.from("news_items").select("source_url");
     const known = new Set((existing ?? []).map((r: { source_url: string | null }) => r.source_url));
-    const fresh = items.filter((i) => !known.has(i.link)).slice(0, 14);
+    const fresh = items
+      .filter((i) => !known.has(i.link))
+      .sort((a, b) => pmRelevanceScore(b) - pmRelevanceScore(a))
+      .slice(0, 24);
 
     if (fresh.length === 0) {
       return new Response(JSON.stringify({ inserted: 0, message: "Already up to date." }), {
@@ -145,7 +159,16 @@ Deno.serve(async (req) => {
     }
 
     const prompt = `Today is ${new Date().toISOString().slice(0, 10)}.
-Here are candidate AI news stories. Keep only the 6 most relevant for a product manager building AI features (models, pricing, agents, voice, vision, tooling, adoption). Set keep=false for the rest.
+Here are candidate AI news stories. Curate no more than 5 stories for a non-technical product manager. Prefer accessible product and industry reporting from TechCrunch and VentureBeat over technical research. Set keep=false for the rest.
+
+Prioritize, in this order:
+1. A new model or meaningful model update
+2. A model, API, or pricing tier being discontinued or changed
+3. Pricing, availability, or access changes that affect product decisions
+4. Useful products and experiences people are building with newly released models
+5. Broad AI product trends with a clear, practical PM implication
+
+Avoid research papers, benchmark-only stories, infrastructure details, and speculative science unless they immediately change what a PM can build or buy. Keep the mix practical and avoid multiple stories saying essentially the same thing.
 For kept stories write:
 - title: a clear headline (max 90 chars)
 - summary: 2 sentences of what happened
@@ -194,6 +217,7 @@ ${fresh.map((it, i) => `[${i}] SOURCE: ${it.source}\nTITLE: ${it.title}\nSUMMARY
 
     const rows = (parsed.stories ?? [])
       .filter((s: { keep?: boolean; index: number }) => s.keep !== false && fresh[s.index])
+      .slice(0, 5)
       .map((s: Record<string, unknown>) => {
         const src = fresh[s.index as number];
         const published = new Date(src.pubDate);
