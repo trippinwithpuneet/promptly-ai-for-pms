@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Search, Star, ChevronRight, Lightbulb, ThumbsUp, ThumbsDown, RefreshCw } from "lucide-react";
+import { BookOpen, Search, Star, ChevronRight, Lightbulb, ThumbsUp, ThumbsDown, RefreshCw, GraduationCap, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 
 interface GlossaryTerm {
@@ -298,12 +298,41 @@ export const GlossarySection = () => {
                 <CardDescription className="text-sm line-clamp-3">
                   {term.simple_explanation}
                 </CardDescription>
-                <Button variant="ghost" size="sm" className="mt-3 p-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="mt-3 h-auto p-0 text-foreground hover:bg-transparent hover:text-primary"
+                >
                   Learn more <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        <div className="mt-10 flex flex-col gap-6 border-y border-primary/30 bg-primary/5 px-6 py-8 md:flex-row md:items-center md:justify-between md:px-8">
+          <div className="flex max-w-2xl items-start gap-4">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+              <GraduationCap className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-sm font-semibold uppercase text-primary">Free course</p>
+              <h3 className="mt-1 text-2xl uppercase">AI 101 for PMs</h3>
+              <p className="mt-2 text-muted-foreground">
+                Go beyond the glossary with a practical introduction to AI, made for product managers.
+              </p>
+            </div>
+          </div>
+          <Button asChild className="shrink-0">
+            <a
+              href="https://trippinwithpuneet.github.io/AI-101-for-PMs/index.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Start the free course
+              <ArrowUpRight className="ml-2 h-4 w-4" />
+            </a>
+          </Button>
         </div>
 
         {/* Term Detail Modal/Panel */}
