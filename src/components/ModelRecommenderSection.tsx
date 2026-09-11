@@ -55,8 +55,8 @@ export const ModelRecommenderSection = () => {
   const isComplete = recommendations.length > 0;
 
   useEffect(() => {
-    if (!isThinking && !isComplete) inputRef.current?.focus();
-  }, [isThinking, isComplete, messages.length]);
+    if (userTurnCount > 0 && !isThinking && !isComplete) inputRef.current?.focus({ preventScroll: true });
+  }, [userTurnCount, isThinking, isComplete, messages.length]);
 
   const submitAnswer = async (event: FormEvent) => {
     event.preventDefault();
