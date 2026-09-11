@@ -310,29 +310,30 @@ export const GlossarySection = () => {
           ))}
         </div>
 
-        <div className="mt-10 flex flex-col gap-6 border-y border-primary/30 bg-primary/5 px-6 py-8 md:flex-row md:items-center md:justify-between md:px-8">
-          <div className="flex max-w-2xl items-start gap-4">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              <GraduationCap className="h-6 w-6" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold uppercase text-primary">Free course</p>
-              <h3 className="mt-1 text-2xl uppercase">AI 101 for PMs</h3>
-              <p className="mt-2 text-muted-foreground">
-                Go beyond the glossary with a practical introduction to AI, made for product managers.
+        <div className="relative mt-14 overflow-hidden border-y border-primary bg-primary px-6 py-10 text-primary-foreground shadow-glow md:px-10 md:py-14">
+          <GraduationCap className="pointer-events-none absolute -right-5 -top-8 h-44 w-44 opacity-10 md:right-8 md:h-56 md:w-56" />
+          <div className="relative grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+            <div className="max-w-3xl">
+              <div className="mb-5 inline-flex items-center gap-2 border border-primary-foreground/30 px-3 py-1 text-sm font-semibold uppercase">
+                <GraduationCap className="h-4 w-4" />
+                Free course for product managers
+              </div>
+              <h3 className="max-w-2xl text-4xl uppercase leading-tight md:text-6xl">Build your AI foundation</h3>
+              <p className="mt-4 max-w-2xl text-lg text-primary-foreground/80 md:text-xl">
+                Take AI 101 for PMs — a practical, jargon-free course made to help you make sharper AI product decisions.
               </p>
             </div>
+            <Button asChild size="lg" variant="secondary" className="min-h-12 shrink-0 border border-primary-foreground/20 px-6 font-semibold">
+              <a
+                href="https://trippinwithpuneet.github.io/AI-101-for-PMs/index.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Start AI 101 free
+                <ArrowUpRight className="ml-2 h-5 w-5" />
+              </a>
+            </Button>
           </div>
-          <Button asChild className="shrink-0">
-            <a
-              href="https://trippinwithpuneet.github.io/AI-101-for-PMs/index.html"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Start the free course
-              <ArrowUpRight className="ml-2 h-4 w-4" />
-            </a>
-          </Button>
         </div>
 
         {/* Term Detail Modal/Panel */}
