@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://promptly-ai-for-pms.lovable.app/sitemap.xml
