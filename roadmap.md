@@ -1,2 +1,2 @@
-- [ ] Change featured jargon on every visit without immediate repeats
-- [ ] Remove the “Add your own story” option from Daily nuggets
+- [x] Change featured jargon on every visit without immediate repeats
+- [x] Remove the “Add your own story” option from Daily nuggets
