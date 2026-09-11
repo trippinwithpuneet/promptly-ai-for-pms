@@ -66,10 +66,10 @@ const mockModels: AIModel[] = [
 ];
 
 const typeColors = {
-  text: "bg-blue-100 text-blue-800",
-  voice: "bg-purple-100 text-purple-800",
-  image: "bg-green-100 text-green-800",
-  multimodal: "bg-orange-100 text-orange-800"
+  text: "bg-info/20 text-info-foreground",
+  voice: "bg-secondary text-secondary-foreground",
+  image: "bg-success/20 text-success-foreground",
+  multimodal: "bg-accent/20 text-foreground"
 };
 
 const pricingColors = {
@@ -107,22 +107,22 @@ export const ModelRecommenderSection = () => {
   };
 
   return (
-    <section id="models" className="py-16 bg-background">
+    <section id="models" className="border-b border-border/70 bg-background py-20 md:py-28">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-4">
-            <Brain className="w-8 h-8 text-primary mr-3" />
-            <h2 className="text-3xl md:text-4xl font-bold">Model finder</h2>
+        <div className="mb-12 max-w-3xl">
+          <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
+            <Brain className="h-4 w-4" />
+            Section 03 / Choose with confidence
           </div>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Tell us your use case and get personalized AI model recommendations 
-            with clear pricing information.
+          <h2 className="text-4xl uppercase md:text-6xl">Model finder</h2>
+          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+            Describe the job. Get a practical shortlist with strengths, limits, and clear pricing.
           </p>
         </div>
 
         <div className="max-w-3xl mx-auto">
           {/* Use Case Input */}
-          <Card className="mb-8">
+          <Card className="mb-8 border-border bg-card shadow-card">
             <CardHeader>
               <CardTitle>Describe Your Use Case</CardTitle>
               <CardDescription>
@@ -164,7 +164,7 @@ export const ModelRecommenderSection = () => {
               <h3 className="text-2xl font-bold text-center">Recommended AI Models</h3>
               
               {recommendations.map((model, index) => (
-                <Card key={model.id} className="overflow-hidden hover:shadow-card transition-shadow">
+                <Card key={model.id} className="overflow-hidden border-border bg-card transition-all hover:border-primary/40 hover:shadow-card">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div>
