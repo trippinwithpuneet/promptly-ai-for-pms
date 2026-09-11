@@ -124,7 +124,7 @@ export const DailyNewsSection = () => {
           <div>
             <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
               <Zap className="h-4 w-4" />
-              Section 01 / Fresh signal
+              Add-on / Stay current
             </div>
             <h2 className="text-4xl uppercase md:text-6xl">Daily nuggets</h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
