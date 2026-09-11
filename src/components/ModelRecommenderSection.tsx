@@ -1,109 +1,121 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { AlertCircle, Brain, CheckCircle, DollarSign, RotateCcw, Send, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Brain, DollarSign, CheckCircle, AlertCircle, Zap } from "lucide-react";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
 
-interface AIModel {
-  id: string;
-  model_name: string;
-  provider: string;
-  model_type: string;
-  pricing_type: string;
-  pricing_details: string;
-  use_cases: string;
-  strengths: string;
-  limitations: string;
+interface ConversationMessage {
+  role: "user" | "assistant";
+  content: string;
 }
 
-// Mock data - will be replaced with Supabase data
-const mockModels: AIModel[] = [
-  {
-    id: "1",
-    model_name: "GPT-4",
-    provider: "OpenAI",
-    model_type: "text",
-    pricing_type: "paid",
-    pricing_details: "$0.03 per 1K tokens (input), $0.06 per 1K tokens (output)",
-    use_cases: "Customer support, content generation, code assistance, analysis",
-    strengths: "Excellent reasoning, good at following instructions, versatile",
-    limitations: "Can be expensive for high volume, sometimes verbose"
-  },
-  {
-    id: "2",
-    model_name: "Claude 3.5 Sonnet",
-    provider: "Anthropic",
-    model_type: "text",
-    pricing_type: "paid", 
-    pricing_details: "$3 per million input tokens, $15 per million output tokens",
-    use_cases: "Complex reasoning, analysis, creative writing, coding",
-    strengths: "Great at analysis, helpful and honest, good safety features",
-    limitations: "Limited availability in some regions, newer so less ecosystem"
-  },
-  {
-    id: "3",
-    model_name: "Gemini Pro",
-    provider: "Google",
-    model_type: "multimodal",
-    pricing_type: "freemium",
-    pricing_details: "Free tier available, paid tiers for higher usage",
-    use_cases: "Text generation, image analysis, multimodal tasks",
-    strengths: "Good integration with Google services, handles images and text",
-    limitations: "Free tier has usage limits, quality can vary"
-  },
-  {
-    id: "4",
-    model_name: "Whisper",
-    provider: "OpenAI",
-    model_type: "voice",
-    pricing_type: "free",
-    pricing_details: "Open source, free to use",
-    use_cases: "Speech-to-text, transcription, voice interfaces",
-    strengths: "Very accurate, supports many languages, free",
-    limitations: "Requires technical setup, no real-time streaming in basic version"
-  }
-];
+interface ModelRecommendation {
+  modelName: string;
+  provider: string;
+  modelType: string;
+  pricingType: string;
+  pricingDetails: string;
+  fitReason: string;
+  strengths: string[];
+  limitations: string[];
+  nextStep: string;
+}
 
-const typeColors = {
-  text: "bg-info/20 text-info-foreground",
-  voice: "bg-secondary text-secondary-foreground",
-  image: "bg-success/20 text-success-foreground",
-  multimodal: "bg-accent/20 text-foreground"
-};
+interface FinderResponse {
+  mode: "question" | "recommendation";
+  question: string | null;
+  questionContext: string | null;
+  summary: string;
+  recommendations: ModelRecommendation[];
+}
 
-const pricingColors = {
+const pricingColors: Record<string, string> = {
   free: "bg-success text-success-foreground",
   paid: "bg-destructive text-destructive-foreground",
-  freemium: "bg-primary text-primary-foreground"
+  freemium: "bg-primary text-primary-foreground",
 };
 
-export const ModelRecommenderSection = () => {
-  const [useCase, setUseCase] = useState("");
-  const [recommendations, setRecommendations] = useState<AIModel[]>([]);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+const initialAssistantMessage = "Tell me what you want AI to do. Include anything you already know about your users, inputs, scale, speed, privacy, or budget.";
 
-  const analyzeUseCase = () => {
-    setIsAnalyzing(true);
-    
-    // Simple keyword-based matching (in real app, this would be more sophisticated)
-    setTimeout(() => {
-      let filtered = mockModels;
-      
-      if (useCase.toLowerCase().includes('voice') || useCase.toLowerCase().includes('speech')) {
-        filtered = mockModels.filter(model => model.model_type === 'voice' || model.use_cases.toLowerCase().includes('voice'));
-      } else if (useCase.toLowerCase().includes('image') || useCase.toLowerCase().includes('visual')) {
-        filtered = mockModels.filter(model => model.model_type === 'image' || model.model_type === 'multimodal');
-      } else if (useCase.toLowerCase().includes('customer support') || useCase.toLowerCase().includes('chat')) {
-        filtered = mockModels.filter(model => model.use_cases.toLowerCase().includes('customer support') || model.use_cases.toLowerCase().includes('chat'));
-      } else {
-        // Show text models by default
-        filtered = mockModels.filter(model => model.model_type === 'text' || model.model_type === 'multimodal');
-      }
-      
-      setRecommendations(filtered.slice(0, 3)); // Top 3 recommendations
-      setIsAnalyzing(false);
-    }, 1500);
+export const ModelRecommenderSection = () => {
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<ConversationMessage[]>([
+    { role: "assistant", content: initialAssistantMessage },
+  ]);
+  const [recommendations, setRecommendations] = useState<ModelRecommendation[]>([]);
+  const [recommendationSummary, setRecommendationSummary] = useState("");
+  const [isThinking, setIsThinking] = useState(false);
+  const [error, setError] = useState("");
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const userTurnCount = messages.filter((message) => message.role === "user").length;
+  const isComplete = recommendations.length > 0;
+
+  useEffect(() => {
+    if (!isThinking && !isComplete) inputRef.current?.focus();
+  }, [isThinking, isComplete, messages.length]);
+
+  const submitAnswer = async (event: FormEvent) => {
+    event.preventDefault();
+    const answer = input.trim();
+    if (!answer || isThinking || isComplete || userTurnCount >= 3) return;
+
+    const nextMessages = [...messages, { role: "user" as const, content: answer }];
+    const conversationForModel = nextMessages.filter((_, index) => index > 0);
+    setMessages(nextMessages);
+    setInput("");
+    setError("");
+    setIsThinking(true);
+
+    const { data, error: functionError } = await supabase.functions.invoke("model-finder", {
+      body: { messages: conversationForModel },
+    });
+
+    setIsThinking(false);
+
+    if (functionError || !data) {
+      setError(functionError?.message || "Model Finder could not respond. Please try again.");
+      return;
+    }
+
+    if (data.error) {
+      setError(data.error);
+      return;
+    }
+
+    const response = data as FinderResponse;
+    const nextTurnCount = userTurnCount + 1;
+
+    if (response.mode === "question" && response.question && nextTurnCount < 3) {
+      const clarification = response.questionContext
+        ? `${response.question}\n\n_${response.questionContext}_`
+        : response.question;
+      setMessages((current) => [...current, { role: "assistant", content: clarification }]);
+      return;
+    }
+
+    if (!response.recommendations?.length) {
+      setError("I need one more try to form a useful shortlist. Please submit your answer again.");
+      return;
+    }
+
+    setRecommendationSummary(response.summary);
+    setRecommendations(response.recommendations.slice(0, 3));
+    setMessages((current) => [
+      ...current,
+      { role: "assistant", content: "I have enough context. Here’s the shortlist I’d test first." },
+    ]);
+  };
+
+  const resetFinder = () => {
+    setInput("");
+    setMessages([{ role: "assistant", content: initialAssistantMessage }]);
+    setRecommendations([]);
+    setRecommendationSummary("");
+    setError("");
   };
 
   return (
@@ -116,114 +128,158 @@ export const ModelRecommenderSection = () => {
           </div>
           <h2 className="text-4xl uppercase md:text-6xl">Model finder</h2>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-            Describe the job. Get a practical shortlist with strengths, limits, and clear pricing.
+            Describe the job. Model Finder will ask only what matters, then recommend within three answers.
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto">
-          {/* Use Case Input */}
-          <Card className="mb-8 border-border bg-card shadow-card">
-            <CardHeader>
-              <CardTitle>Describe Your Use Case</CardTitle>
-              <CardDescription>
-                Tell us what you want to build or improve. Be specific about your requirements.
-              </CardDescription>
+        <div className="mx-auto max-w-4xl">
+          <Card className="border-border bg-card shadow-card">
+            <CardHeader className="border-b border-border">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2 text-2xl">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                    Find your best-fit model
+                  </CardTitle>
+                  <CardDescription className="mt-2">
+                    One focused conversation. No account or saved history.
+                  </CardDescription>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-muted-foreground">{userTurnCount} of 3 answers</span>
+                  {userTurnCount > 0 && (
+                    <Button variant="ghost" size="sm" onClick={resetFinder}>
+                      <RotateCcw className="mr-2 h-4 w-4" />
+                      Start over
+                    </Button>
+                  )}
+                </div>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <Textarea
-                placeholder="Example: I want to build a customer support chatbot that can understand images of product issues and provide helpful responses. We get about 1000 conversations per month."
-                value={useCase}
-                onChange={(e) => setUseCase(e.target.value)}
-                rows={4}
-                className="resize-none"
-              />
-              <Button 
-                onClick={analyzeUseCase}
-                disabled={!useCase.trim() || isAnalyzing}
-                className="w-full"
-                size="lg"
-              >
-                {isAnalyzing ? (
-                  <>
-                    <Zap className="w-4 h-4 mr-2 animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <Brain className="w-4 h-4 mr-2" />
-                    Get Recommendations
-                  </>
+
+            <CardContent className="p-0">
+              <div className="space-y-5 p-5 md:p-7" aria-live="polite">
+                {messages.map((message, index) => (
+                  <div
+                    key={`${message.role}-${index}`}
+                    className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`max-w-[88%] rounded-lg px-4 py-3 text-sm leading-relaxed md:max-w-[75%] ${
+                        message.role === "user"
+                          ? "bg-primary text-primary-foreground"
+                          : "border border-border bg-muted text-foreground"
+                      }`}
+                    >
+                      <ReactMarkdown>{message.content}</ReactMarkdown>
+                    </div>
+                  </div>
+                ))}
+
+                {isThinking && (
+                  <div className="flex justify-start">
+                    <div className="flex items-center gap-2 rounded-lg border border-border bg-muted px-4 py-3 text-sm text-muted-foreground">
+                      <Sparkles className="h-4 w-4 animate-pulse text-primary" />
+                      Thinking about what matters for this choice…
+                    </div>
+                  </div>
                 )}
-              </Button>
+
+                {error && (
+                  <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive-foreground">
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                    {error}
+                  </div>
+                )}
+              </div>
+
+              {!isComplete && (
+                <form onSubmit={submitAnswer} className="border-t border-border p-5 md:p-7">
+                  <Textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={(event) => setInput(event.target.value)}
+                    placeholder={userTurnCount === 0
+                      ? "Example: I need to automate customer support for an Indian commerce app…"
+                      : "Add the detail Model Finder asked for…"}
+                    rows={4}
+                    disabled={isThinking}
+                    className="resize-none"
+                    aria-label="Your AI use case"
+                  />
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-xs text-muted-foreground">
+                      It may recommend immediately when your brief is detailed enough.
+                    </p>
+                    <Button type="submit" size="lg" disabled={!input.trim() || isThinking}>
+                      {userTurnCount === 0 ? "Find models" : "Send answer"}
+                      <Send className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </form>
+              )}
             </CardContent>
           </Card>
 
-          {/* Recommendations */}
-          {recommendations.length > 0 && (
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-center">Recommended AI Models</h3>
-              
+          {isComplete && (
+            <div className="mt-10 space-y-6">
+              <div className="flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-sm font-semibold uppercase text-primary">Your shortlist</p>
+                  <h3 className="mt-2 text-3xl uppercase">Models worth testing</h3>
+                  <p className="mt-3 max-w-2xl text-muted-foreground">{recommendationSummary}</p>
+                </div>
+                <Button variant="outline" onClick={resetFinder}>
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Try another use case
+                </Button>
+              </div>
+
               {recommendations.map((model, index) => (
-                <Card key={model.id} className="overflow-hidden border-border bg-card transition-all hover:border-primary/40 hover:shadow-card">
+                <Card key={`${model.provider}-${model.modelName}`} className="overflow-hidden border-border bg-card transition-all hover:border-primary/40 hover:shadow-card">
                   <CardHeader>
-                    <div className="flex items-start justify-between">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                       <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="secondary" className="text-xs">
-                            #{index + 1} Recommendation
+                        <div className="mb-3 flex flex-wrap items-center gap-2">
+                          <Badge variant="secondary">#{index + 1} recommendation</Badge>
+                          <Badge className={pricingColors[model.pricingType.toLowerCase()] ?? "bg-muted text-muted-foreground"}>
+                            {model.pricingType}
                           </Badge>
-                          <Badge className={pricingColors[model.pricing_type as keyof typeof pricingColors]}>
-                            {model.pricing_type}
-                          </Badge>
+                          <Badge variant="outline">{model.modelType}</Badge>
                         </div>
-                        <CardTitle className="text-xl">{model.model_name}</CardTitle>
-                        <CardDescription className="flex items-center gap-2">
-                          <span>by {model.provider}</span>
-                          <Badge 
-                            variant="outline" 
-                            className={typeColors[model.model_type as keyof typeof typeColors]}
-                          >
-                            {model.model_type}
-                          </Badge>
-                        </CardDescription>
+                        <CardTitle className="text-2xl">{model.modelName}</CardTitle>
+                        <CardDescription>by {model.provider}</CardDescription>
                       </div>
-                      <DollarSign className="w-5 h-5 text-muted-foreground" />
+                      <DollarSign className="h-5 w-5 text-muted-foreground" />
                     </div>
                   </CardHeader>
-                  
-                  <CardContent className="space-y-4">
-                    {/* Pricing */}
-                    <div className="bg-muted rounded-lg p-3">
-                      <div className="flex items-center mb-1">
-                        <DollarSign className="w-4 h-4 text-muted-foreground mr-1" />
-                        <span className="text-sm font-medium">Pricing</span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">{model.pricing_details}</p>
+                  <CardContent className="space-y-5">
+                    <p className="text-base leading-relaxed">{model.fitReason}</p>
+                    <div className="rounded-lg bg-muted p-4">
+                      <p className="mb-1 text-sm font-semibold">Pricing</p>
+                      <p className="text-sm text-muted-foreground">{model.pricingDetails}</p>
                     </div>
-
-                    {/* Use Cases */}
-                    <div>
-                      <h4 className="text-sm font-medium mb-1">Best For</h4>
-                      <p className="text-sm text-muted-foreground">{model.use_cases}</p>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="rounded-lg border border-success/20 bg-success/10 p-4">
+                        <p className="mb-2 flex items-center text-sm font-semibold text-success-foreground">
+                          <CheckCircle className="mr-2 h-4 w-4" /> Strengths
+                        </p>
+                        <ul className="space-y-1 text-sm text-muted-foreground">
+                          {model.strengths.map((strength) => <li key={strength}>• {strength}</li>)}
+                        </ul>
+                      </div>
+                      <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-4">
+                        <p className="mb-2 flex items-center text-sm font-semibold text-destructive-foreground">
+                          <AlertCircle className="mr-2 h-4 w-4" /> Watch-outs
+                        </p>
+                        <ul className="space-y-1 text-sm text-muted-foreground">
+                          {model.limitations.map((limitation) => <li key={limitation}>• {limitation}</li>)}
+                        </ul>
+                      </div>
                     </div>
-
-                    {/* Strengths & Limitations */}
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="bg-success/10 border border-success/20 rounded-lg p-3">
-                        <div className="flex items-center mb-1">
-                          <CheckCircle className="w-4 h-4 text-success-foreground mr-1" />
-                          <span className="text-sm font-medium text-success-foreground">Strengths</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground">{model.strengths}</p>
-                      </div>
-                      
-                      <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-3">
-                        <div className="flex items-center mb-1">
-                          <AlertCircle className="w-4 h-4 text-destructive-foreground mr-1" />
-                          <span className="text-sm font-medium text-destructive-foreground">Limitations</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground">{model.limitations}</p>
-                      </div>
+                    <div className="border-l-2 border-primary pl-4">
+                      <p className="text-sm font-semibold">Best next step</p>
+                      <p className="mt-1 text-sm text-muted-foreground">{model.nextStep}</p>
                     </div>
                   </CardContent>
                 </Card>
