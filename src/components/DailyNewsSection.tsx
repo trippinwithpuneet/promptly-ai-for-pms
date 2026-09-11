@@ -1,19 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Zap,
   ExternalLink,
@@ -24,7 +12,6 @@ import {
   ChevronDown,
   ChevronUp,
   RefreshCw,
-  Plus,
   UserRound,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -60,16 +47,6 @@ export const DailyNewsSection = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
   const [expandedDetails, setExpandedDetails] = useState<Record<string, boolean>>({});
-  const [addOpen, setAddOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({
-    title: "",
-    summary: "",
-    source_url: "",
-    source_name: "",
-    submitted_by: "",
-    relevance_to_pm: "",
-  });
 
   const loadNews = useCallback(async () => {
     const { data, error } = await supabase
@@ -141,45 +118,6 @@ export const DailyNewsSection = () => {
   const toggleDetails = (section: string) =>
     setExpandedDetails((prev) => ({ ...prev, [section]: !prev[section] }));
 
-  const submitStory = async () => {
-    if (!form.title.trim() || !form.summary.trim()) {
-      toast({
-        title: "Add a headline and a short summary",
-        description: "Those two are needed to save your story.",
-        variant: "destructive",
-      });
-      return;
-    }
-    setSubmitting(true);
-    const { error } = await supabase.from("news_items").insert({
-      title: form.title.trim(),
-      summary: form.summary.trim(),
-      relevance_to_pm: form.relevance_to_pm.trim() || null,
-      source_url: form.source_url.trim() || null,
-      source_name: form.source_name.trim() || "Added by you",
-      submitted_by: form.submitted_by.trim() || null,
-      is_user_submitted: true,
-      is_featured: false,
-    });
-    setSubmitting(false);
-
-    if (error) {
-      toast({
-        title: "Could not save your story",
-        description: error.message.includes("duplicate")
-          ? "That link is already on the feed."
-          : "Please try again.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    toast({ title: "Story added", description: "It's now at the top of your feed." });
-    setForm({ title: "", summary: "", source_url: "", source_name: "", submitted_by: "", relevance_to_pm: "" });
-    setAddOpen(false);
-    await loadNews();
-  };
-
   return (
     <section id="news" className="py-16 bg-background">
       <div className="container mx-auto px-4">
@@ -199,91 +137,6 @@ export const DailyNewsSection = () => {
             <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
             {refreshing ? "Fetching latest news…" : "Get today's news"}
           </Button>
-
-          <Dialog open={addOpen} onOpenChange={setAddOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                Add your own story
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-lg">
-              <DialogHeader>
-                <DialogTitle>Add a story to the feed</DialogTitle>
-                <DialogDescription>
-                  Spotted something worth keeping? Save it here and it shows up at the top.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="story-title">Headline</Label>
-                  <Input
-                    id="story-title"
-                    value={form.title}
-                    onChange={(e) => setForm({ ...form, title: e.target.value })}
-                    placeholder="Anthropic ships cheaper voice model"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="story-summary">What happened</Label>
-                  <Textarea
-                    id="story-summary"
-                    rows={3}
-                    value={form.summary}
-                    onChange={(e) => setForm({ ...form, summary: e.target.value })}
-                    placeholder="A couple of sentences in your own words"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="story-relevance">Why it matters to you (optional)</Label>
-                  <Textarea
-                    id="story-relevance"
-                    rows={2}
-                    value={form.relevance_to_pm}
-                    onChange={(e) => setForm({ ...form, relevance_to_pm: e.target.value })}
-                    placeholder="Could cut our support voice-bot costs"
-                  />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="story-url">Link (optional)</Label>
-                    <Input
-                      id="story-url"
-                      value={form.source_url}
-                      onChange={(e) => setForm({ ...form, source_url: e.target.value })}
-                      placeholder="https://…"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="story-source">Source name (optional)</Label>
-                    <Input
-                      id="story-source"
-                      value={form.source_name}
-                      onChange={(e) => setForm({ ...form, source_name: e.target.value })}
-                      placeholder="The Verge"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="story-by">Your name (optional)</Label>
-                  <Input
-                    id="story-by"
-                    value={form.submitted_by}
-                    onChange={(e) => setForm({ ...form, submitted_by: e.target.value })}
-                    placeholder="Puneet"
-                  />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setAddOpen(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={submitStory} disabled={submitting}>
-                  {submitting ? "Saving…" : "Add story"}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </div>
 
         <div className="max-w-4xl mx-auto mb-8">
@@ -301,7 +154,7 @@ export const DailyNewsSection = () => {
               <CardContent className="p-10 text-center space-y-4">
                 <h3 className="text-xl font-semibold">No nuggets yet</h3>
                 <p className="text-muted-foreground">
-                  Fetch today's AI news, or add a story you came across yourself.
+                  Fetch today's AI news to start your feed.
                 </p>
                 <Button onClick={() => refreshNews()} disabled={refreshing}>
                   <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
