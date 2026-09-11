@@ -17,7 +17,7 @@ export const HeroSection = () => {
           AI, decoded for product people
         </div>
         <h1 className="max-w-5xl text-5xl uppercase leading-[0.95] text-foreground md:text-7xl lg:text-8xl">
-          Less jargon.<br /><span className="text-primary">More signal.</span>
+          Promptly — less jargon.<br /><span className="text-primary">More signal.</span>
         </h1>
         <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
           Daily AI news, plain-English concepts, and practical model choices for product managers.
