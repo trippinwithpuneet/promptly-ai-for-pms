@@ -30,6 +30,25 @@ type ConversationMessage = {
   content: string;
 };
 
+type FinderOutput = z.infer<typeof recommendationSchema>;
+
+function recoverOutput(text: string): FinderOutput | null {
+  try {
+    const raw = JSON.parse(text) as Record<string, unknown>;
+    const recommendations = Array.isArray(raw.recommendations) ? raw.recommendations : [];
+    return recommendationSchema.parse({
+      ...raw,
+      mode: raw.mode ?? (recommendations.length > 0 ? "recommendation" : "question"),
+      question: raw.question ?? null,
+      questionContext: raw.questionContext ?? null,
+      summary: raw.summary ?? "",
+      recommendations,
+    });
+  } catch {
+    return null;
+  }
+}
+
 function errorMessage(status: number, fallback: string) {
   if (status === 402) return "AI credits are unavailable. The app owner can add credits in Lovable.";
   if (status === 403) return "Model Finder is currently unavailable because AI access is disabled.";
@@ -93,14 +112,22 @@ Hard rules:
 - In question mode, recommendations must be empty, summary must be a short acknowledgment, and questionContext briefly explains why the answer matters.
 - In recommendation mode, question and questionContext must be null, and summary must synthesize the understood need.`;
 
-    const result = await generateText({
-      model: gateway("google/gemini-3.8-flash"),
-      system: systemPrompt,
-      messages,
-      output: Output.object({ schema: recommendationSchema }),
-    });
+    try {
+      const result = await generateText({
+        model: gateway("google/gemini-3.8-flash"),
+        system: systemPrompt,
+        messages,
+        output: Output.object({ schema: recommendationSchema }),
+      });
 
-    return Response.json(result.output, { headers: corsHeaders });
+      return Response.json(result.output, { headers: corsHeaders });
+    } catch (error) {
+      if (NoObjectGeneratedError.isInstance(error)) {
+        const recovered = recoverOutput(error.text);
+        if (recovered) return Response.json(recovered, { headers: corsHeaders });
+      }
+      throw error;
+    }
   } catch (error) {
     console.error("model-finder failed", error);
 
