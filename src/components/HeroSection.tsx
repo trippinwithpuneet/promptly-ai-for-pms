@@ -28,7 +28,7 @@ export const HeroSection = () => {
             onClick={scrollToContent}
             className="h-12 px-6 text-base font-semibold shadow-glow"
           >
-            Start a Free AI course
+            Take the Free AI 101 Course
             <ArrowDown className="ml-2 h-4 w-4" />
           </Button>
           <p className="text-sm text-muted-foreground">
