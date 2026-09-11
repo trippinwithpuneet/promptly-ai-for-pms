@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { MessageCircle, Send, Star } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const FeedbackSection = () => {
   const { toast } = useToast();
@@ -22,8 +23,25 @@ export const FeedbackSection = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call - in real app, this would save to Supabase
-    setTimeout(() => {
+    const { error } = await supabase.from("feedback").insert({
+      name: formData.name.trim(),
+      email: formData.email.trim() || null,
+      feedback: formData.feedback.trim(),
+      section: formData.section || null,
+      rating: formData.rating || null,
+    });
+
+    if (error) {
+      console.error("Feedback submission failed:", error.message);
+      toast({
+        title: "Feedback wasn't submitted",
+        description: "Please try again in a moment.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
       toast({
         title: "Thank you for your feedback! 🎉",
         description: "Your feedback helps us improve Promptly.",
@@ -38,7 +56,6 @@ export const FeedbackSection = () => {
         rating: 0
       });
       setIsSubmitting(false);
-    }, 1000);
   };
 
   const handleRating = (rating: number) => {
