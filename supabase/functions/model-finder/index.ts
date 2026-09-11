@@ -42,7 +42,7 @@ function recoverOutput(text: string): FinderOutput | null {
         const fitReason = String(recommendation.fitReason ?? "A practical fit for the described use case.");
         const tradeOffs = String(recommendation.tradeOffs ?? "Validate quality and cost with your own examples.");
         return {
-          modelName: String(recommendation.modelName ?? "AI model"),
+          modelName: String(recommendation.modelName ?? recommendation.name ?? "AI model"),
           provider: String(recommendation.provider ?? "Provider"),
           modelType: String(recommendation.modelType ?? "General purpose"),
           pricingType: String(recommendation.pricingType ?? accessType.split(/[ (]/)[0] ?? "paid"),
@@ -129,6 +129,7 @@ Hard rules:
 - There are ${userTurnCount} user answers so far. Never ask another question when this number is 3.
 - Prefer recommending immediately when the use case is already specific.
 - If recommending, return 2 or 3 practical, currently available models ranked by fit.
+- For every recommendation, use exactly these fields: modelName, provider, modelType, pricingType, pricingDetails, fitReason, strengths, limitations, and nextStep.
 - Clearly distinguish free, freemium, and paid access. Avoid false precision; say pricing varies when uncertain.
 - Explain trade-offs in plain language for a PM. Do not assume engineering knowledge.
 - In question mode, recommendations must be empty, summary must be a short acknowledgment, and questionContext briefly explains why the answer matters.
