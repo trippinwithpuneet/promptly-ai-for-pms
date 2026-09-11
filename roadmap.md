@@ -1,2 +1,4 @@
-- [x] Change featured jargon on every visit without immediate repeats
-- [x] Remove the “Add your own story” option from Daily nuggets
+# Roadmap
+
+- [x] Add AI 101 for PMs course invitation beneath the glossary cards.
+- [ ] Fix the glossary card “Learn more” hover state.
