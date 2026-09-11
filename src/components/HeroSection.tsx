@@ -3,7 +3,7 @@ import { ArrowDown, Sparkles } from "lucide-react";
 
 export const HeroSection = () => {
   const scrollToContent = () => {
-    const element = document.getElementById('news');
+    const element = document.getElementById('glossary');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
@@ -14,13 +14,13 @@ export const HeroSection = () => {
       <div className="container relative z-10 mx-auto py-20 md:py-24">
         <div className="mb-6 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
           <Sparkles className="h-4 w-4" />
-          AI, decoded for product people
+          Learn AI. Choose smarter.
         </div>
         <h1 className="max-w-5xl text-5xl uppercase leading-[0.95] text-foreground md:text-7xl lg:text-8xl">
-          Promptly — less jargon.<br /><span className="text-primary">More signal.</span>
+          Understand AI.<br /><span className="text-primary">Build better products.</span>
         </h1>
         <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-          Daily AI news, plain-English concepts, and practical model choices for product managers.
+          Break down AI jargon, build your foundation with AI 101, and find the right model for every product challenge.
         </p>
         <div className="mt-9 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
           <Button 
@@ -28,11 +28,11 @@ export const HeroSection = () => {
             onClick={scrollToContent}
             className="h-12 px-6 text-base font-semibold shadow-glow"
           >
-            Read today's nuggets
+            Start with Jargon Buster
             <ArrowDown className="ml-2 h-4 w-4" />
           </Button>
           <p className="text-sm text-muted-foreground">
-            Curated for fast-moving product teams
+            Made for product managers, not engineers
           </p>
         </div>
       </div>

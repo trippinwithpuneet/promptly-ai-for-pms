@@ -10,9 +10,9 @@ const Index = () => {
     <div className="min-h-screen overflow-x-hidden bg-background">
       <Header />
       <HeroSection />
-      <DailyNewsSection />
       <GlossarySection />
       <ModelRecommenderSection />
+      <DailyNewsSection />
       <FeedbackSection />
     </div>
   );

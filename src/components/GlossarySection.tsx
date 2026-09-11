@@ -225,7 +225,7 @@ export const GlossarySection = () => {
         <div className="mb-12 max-w-3xl">
           <div className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase text-primary">
             <BookOpen className="h-4 w-4" />
-            Section 02 / Learn the language
+            Section 01 / Learn the language
           </div>
           <h2 className="text-4xl uppercase md:text-6xl">Jargon buster</h2>
           <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -310,13 +310,13 @@ export const GlossarySection = () => {
           ))}
         </div>
 
-        <div className="relative mt-14 overflow-hidden border-y border-primary bg-primary px-6 py-10 text-primary-foreground shadow-glow md:px-10 md:py-14">
+        <div id="course" className="relative mt-14 scroll-mt-24 overflow-hidden border-y border-primary bg-primary px-6 py-10 text-primary-foreground shadow-glow md:px-10 md:py-14">
           <GraduationCap className="pointer-events-none absolute -right-5 -top-8 h-44 w-44 opacity-10 md:right-8 md:h-56 md:w-56" />
           <div className="relative grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div className="max-w-3xl">
               <div className="mb-5 inline-flex items-center gap-2 border border-primary-foreground/30 px-3 py-1 text-sm font-semibold uppercase">
                 <GraduationCap className="h-4 w-4" />
-                Free course for product managers
+                Section 02 / Free course for product managers
               </div>
               <h3 className="max-w-2xl text-4xl uppercase leading-tight md:text-6xl">Build your AI foundation</h3>
               <p className="mt-4 max-w-2xl text-lg text-primary-foreground/80 md:text-xl">
