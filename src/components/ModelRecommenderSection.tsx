@@ -70,6 +70,12 @@ export const ModelRecommenderSection = () => {
     setError("");
     setIsThinking(true);
 
+    const restoreFailedAnswer = (message: string) => {
+      setMessages(messages);
+      setInput(answer);
+      setError(message);
+    };
+
     const { data, error: functionError } = await supabase.functions.invoke("model-finder", {
       body: { messages: conversationForModel },
     });
@@ -77,12 +83,12 @@ export const ModelRecommenderSection = () => {
     setIsThinking(false);
 
     if (functionError || !data) {
-      setError(functionError?.message || "Model Finder could not respond. Please try again.");
+      restoreFailedAnswer(functionError?.message || "Model Finder could not respond. Please try again.");
       return;
     }
 
     if (data.error) {
-      setError(data.error);
+      restoreFailedAnswer(data.error);
       return;
     }
 
@@ -98,7 +104,7 @@ export const ModelRecommenderSection = () => {
     }
 
     if (!response.recommendations?.length) {
-      setError("I need one more try to form a useful shortlist. Please submit your answer again.");
+      restoreFailedAnswer("I couldn't form a useful shortlist. Your answer is still here—please try again.");
       return;
     }
 
