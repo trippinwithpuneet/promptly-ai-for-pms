@@ -1,11 +1,7 @@
 import { createOpenAICompatible } from "npm:@ai-sdk/openai-compatible";
-import { generateText, NoObjectGeneratedError, Output } from "npm:ai";
+import { generateText } from "npm:ai";
+import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
 import { z } from "npm:zod";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
 
 const recommendationSchema = z.object({
   mode: z.enum(["question", "recommendation"]),
@@ -34,7 +30,9 @@ type FinderOutput = z.infer<typeof recommendationSchema>;
 
 function recoverOutput(text: string): FinderOutput | null {
   try {
-    const raw = JSON.parse(text) as Record<string, unknown>;
+    const jsonText = text.match(/```(?:json)?\s*([\s\S]*?)```/i)?.[1]
+      ?? text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1);
+    const raw = JSON.parse(jsonText) as Record<string, unknown>;
     const recommendations = Array.isArray(raw.recommendations)
       ? raw.recommendations.map((item) => {
         const recommendation = item as Record<string, unknown>;
@@ -133,33 +131,28 @@ Hard rules:
 - Clearly distinguish free, freemium, and paid access. Avoid false precision; say pricing varies when uncertain.
 - Explain trade-offs in plain language for a PM. Do not assume engineering knowledge.
 - In question mode, recommendations must be empty, summary must be a short acknowledgment, and questionContext briefly explains why the answer matters.
-- In recommendation mode, question and questionContext must be null, and summary must synthesize the understood need.`;
+- In recommendation mode, question and questionContext must be null, and summary must synthesize the understood need.
 
-    try {
-      const result = await generateText({
-        model: gateway("google/gemini-3.8-flash"),
-        system: systemPrompt,
-        messages,
-        output: Output.object({ schema: recommendationSchema }),
-      });
+Return only one valid JSON object with this exact shape and no markdown:
+{"mode":"question"|"recommendation","question":string|null,"questionContext":string|null,"summary":string,"recommendations":[{"modelName":string,"provider":string,"modelType":string,"pricingType":string,"pricingDetails":string,"fitReason":string,"strengths":string[],"limitations":string[],"nextStep":string}]}`;
 
-      return Response.json(result.output, { headers: corsHeaders });
-    } catch (error) {
-      if (NoObjectGeneratedError.isInstance(error)) {
-        const recovered = recoverOutput(error.text);
-        if (recovered) return Response.json(recovered, { headers: corsHeaders });
-      }
-      throw error;
-    }
-  } catch (error) {
-    console.error("model-finder failed", error);
+    const result = await generateText({
+      model: gateway("google/gemini-3.8-flash"),
+      system: systemPrompt,
+      messages,
+    });
+    const output = recoverOutput(result.text);
 
-    if (NoObjectGeneratedError.isInstance(error)) {
+    if (!output) {
       return Response.json(
-        { error: "Model Finder could not structure that recommendation. Please try again." },
+        { error: "Model Finder could not read that recommendation. Please try again." },
         { status: 502, headers: corsHeaders },
       );
     }
+
+    return Response.json(output, { headers: corsHeaders });
+  } catch (error) {
+    console.error("model-finder failed", error);
 
     const status = typeof error === "object" && error && "statusCode" in error
       ? Number(error.statusCode)
