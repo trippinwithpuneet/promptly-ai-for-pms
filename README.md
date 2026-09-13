@@ -1,73 +1,62 @@
-# Welcome to your Lovable project
+# Promptly
 
-## Project info
+**AI knowledge for product managers, without the jargon.**
 
-**URL**: https://lovable.dev/projects/db5f68e8-6e25-41fa-b305-b9a8b2d9c388
+[Visit Promptly](https://promptly-ai-for-pms.lovable.app) · [Take the free AI 101 course](https://trippinwithpuneet.github.io/AI-101-for-PMs/index.html)
 
-## How can I edit this code?
+Promptly helps product managers understand AI, choose the right models, and stay current without needing a technical background. It turns complex concepts and fast-moving industry news into clear, practical guidance for building better products.
 
-There are several ways of editing your application.
+## What Promptly offers
 
-**Use Lovable**
+### AI 101 for PMs
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/db5f68e8-6e25-41fa-b305-b9a8b2d9c388) and start prompting.
+A free foundation course created for product managers who want to understand AI concepts and apply them confidently at work.
 
-Changes made via Lovable will be committed automatically to this repo.
+### Jargon Buster
 
-**Use your preferred IDE**
+A searchable glossary of common AI terms explained in plain language. Each term includes:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- An “Explain like I’m 5” introduction
+- How the concept is used
+- Benefits and drawbacks
+- Practical alternatives
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Featured terms rotate between visits so there is always something new to learn.
 
-Follow these steps:
+### Model Finder
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+A conversational guide for choosing an AI model. Describe what you want to build and Promptly may ask a few focused follow-up questions before recommending a ranked shortlist, including pricing and trade-offs.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Daily Nuggets
 
-# Step 3: Install the necessary dependencies.
-npm i
+Five curated AI updates focused on what matters to product managers: model launches and retirements, pricing changes, new capabilities, and useful products being built with AI. Stories are summarized with practical PM use cases and source links.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Feedback
+
+Visitors can share feedback directly from the site to help shape future improvements.
+
+## Built with
+
+- React and TypeScript
+- Vite
+- Tailwind CSS and shadcn/ui
+- Lovable Cloud for data and server functions
+- Lovable AI for model recommendations and news processing
+- Model Context Protocol (MCP) tools for agent access
+
+## Run locally
+
+You will need [Node.js](https://nodejs.org/) and npm installed.
+
+```bash
+git clone https://github.com/trippinwithpuneet/promptly-ai-for-pms.git
+cd promptly-ai-for-pms
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be available at the local address shown in your terminal. Connected data and AI features require the corresponding environment configuration.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Contributing
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/db5f68e8-6e25-41fa-b305-b9a8b2d9c388) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Ideas, feedback, and contributions are welcome. Open an issue to suggest an improvement or submit a pull request with a focused change.
