@@ -382,8 +382,8 @@ export const GlossarySection = () => {
                 {selectedTerm.benefits && (
                   <div className="bg-success/10 border border-success/20 rounded-lg p-4">
                     <div className="flex items-center mb-2">
-                      <ThumbsUp className="w-4 h-4 text-success-foreground mr-2" />
-                      <h4 className="font-semibold text-success-foreground">Benefits</h4>
+                      <ThumbsUp className="mr-2 h-4 w-4 text-success" />
+                      <h4 className="font-semibold text-success">Benefits</h4>
                     </div>
                     <p className="text-sm text-muted-foreground">{selectedTerm.benefits}</p>
                   </div>
@@ -392,8 +392,8 @@ export const GlossarySection = () => {
                 {selectedTerm.drawbacks && (
                   <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
                     <div className="flex items-center mb-2">
-                      <ThumbsDown className="w-4 h-4 text-destructive-foreground mr-2" />
-                      <h4 className="font-semibold text-destructive-foreground">Drawbacks</h4>
+                      <ThumbsDown className="mr-2 h-4 w-4 text-destructive" />
+                      <h4 className="font-semibold text-destructive">Drawbacks</h4>
                     </div>
                     <p className="text-sm text-muted-foreground">{selectedTerm.drawbacks}</p>
                   </div>

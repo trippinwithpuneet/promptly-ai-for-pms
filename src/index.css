@@ -41,7 +41,7 @@
     --accent-foreground: 80 12% 8%;
 
     --destructive: 0 75% 55%;
-    --destructive-foreground: 0 72% 34%;
+    --destructive-foreground: 0 0% 98%;
 
     --border: 70 9% 78%;
     --input: 70 9% 70%;
@@ -49,7 +49,7 @@
     
     /* Success and info colors - Dark theme optimized */
     --success: 150 55% 38%;
-    --success-foreground: 150 66% 25%;
+    --success-foreground: 0 0% 98%;
     
     --info: 79 62% 88%;
     --info-foreground: 83 70% 25%;

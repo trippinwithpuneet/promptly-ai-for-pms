@@ -203,7 +203,7 @@ export const DailyNewsSection = () => {
                       onClick={() => toggleDetails("useCases")}
                       className="w-full justify-between p-0 h-auto hover:bg-transparent"
                     >
-                      <h4 className="font-semibold text-success-foreground flex items-center">
+                      <h4 className="flex items-center font-semibold text-success">
                         <Target className="w-4 h-4 mr-2" />
                         PM Use Cases ({currentNews.pm_use_cases.length})
                       </h4>
@@ -218,7 +218,7 @@ export const DailyNewsSection = () => {
                       <div className="mt-3 space-y-2 animate-fade-in">
                         {currentNews.pm_use_cases.map((useCase, idx) => (
                           <div key={idx} className="flex items-start gap-2">
-                            <span className="text-success-foreground font-medium text-sm">•</span>
+                            <span className="text-sm font-medium text-success">•</span>
                             <span className="text-sm text-muted-foreground">{useCase}</span>
                           </div>
                         ))}

@@ -192,7 +192,7 @@ export const ModelRecommenderSection = () => {
                 )}
 
                 {error && (
-                  <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive-foreground">
+                  <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
                     <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
                     {error}
                   </div>
@@ -267,7 +267,7 @@ export const ModelRecommenderSection = () => {
                     </div>
                     <div className="grid gap-4 md:grid-cols-2">
                       <div className="rounded-lg border border-success/20 bg-success/10 p-4">
-                        <p className="mb-2 flex items-center text-sm font-semibold text-success-foreground">
+                        <p className="mb-2 flex items-center text-sm font-semibold text-success">
                           <CheckCircle className="mr-2 h-4 w-4" /> Strengths
                         </p>
                         <ul className="space-y-1 text-sm text-muted-foreground">
@@ -275,7 +275,7 @@ export const ModelRecommenderSection = () => {
                         </ul>
                       </div>
                       <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-4">
-                        <p className="mb-2 flex items-center text-sm font-semibold text-destructive-foreground">
+                        <p className="mb-2 flex items-center text-sm font-semibold text-destructive">
                           <AlertCircle className="mr-2 h-4 w-4" /> Watch-outs
                         </p>
                         <ul className="space-y-1 text-sm text-muted-foreground">
