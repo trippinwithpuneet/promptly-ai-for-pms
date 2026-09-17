@@ -167,8 +167,8 @@ const mockTerms: GlossaryTerm[] = [
 ];
 
 const difficultyColors = {
-  beginner: "border-level-beginner bg-level-beginner text-level-beginner-foreground",
-  intermediate: "border-level-intermediate bg-level-intermediate text-level-intermediate-foreground",
+  beginner: "border-level-beginner bg-level-beginner text-level-beginner-foreground dark:border-success/30 dark:bg-success/10 dark:text-success",
+  intermediate: "border-level-intermediate bg-level-intermediate text-level-intermediate-foreground dark:border-primary/30 dark:bg-primary/10 dark:text-primary",
   advanced: "border-level-advanced bg-level-advanced text-level-advanced-foreground"
 };
 
