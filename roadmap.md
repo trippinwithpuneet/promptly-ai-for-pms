@@ -14,3 +14,5 @@
 - [x] Curate Daily Nuggets to five practical, PM-focused stories and widen the Model Finder prompt.
 - [x] Move “Explain like I’m 5” from Daily Nuggets into glossary term details.
 - [x] Add a persistent light mode with a header theme toggle.
+- [ ] Improve the beginner, intermediate, and advanced glossary tag colors in both themes.
+- [ ] Confirm all current changes are synced to GitHub.
