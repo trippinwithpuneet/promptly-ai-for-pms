@@ -167,9 +167,9 @@ const mockTerms: GlossaryTerm[] = [
 ];
 
 const difficultyColors = {
-  beginner: "bg-success/20 text-success-foreground",
-  intermediate: "border border-primary/60 bg-primary text-primary-foreground",
-  advanced: "bg-destructive/20 text-destructive-foreground"
+  beginner: "border-level-beginner bg-level-beginner text-level-beginner-foreground",
+  intermediate: "border-level-intermediate bg-level-intermediate text-level-intermediate-foreground",
+  advanced: "border-level-advanced bg-level-advanced text-level-advanced-foreground"
 };
 
 export const GlossarySection = () => {
@@ -242,7 +242,7 @@ export const GlossarySection = () => {
                   <Star className="h-5 w-5" />
                   <span className="text-sm font-semibold uppercase">Featured this visit</span>
                 </div>
-                <Badge className="border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground">
+                <Badge className={difficultyColors[featuredTerm.difficulty_level as keyof typeof difficultyColors]}>
                   {featuredTerm.difficulty_level}
                 </Badge>
               </div>

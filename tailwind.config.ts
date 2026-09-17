@@ -45,6 +45,14 @@ export default {
 					DEFAULT: 'hsl(var(--info))',
 					foreground: 'hsl(var(--info-foreground))'
 				},
+				level: {
+					beginner: 'hsl(var(--level-beginner))',
+					'beginner-foreground': 'hsl(var(--level-beginner-foreground))',
+					intermediate: 'hsl(var(--level-intermediate))',
+					'intermediate-foreground': 'hsl(var(--level-intermediate-foreground))',
+					advanced: 'hsl(var(--level-advanced))',
+					'advanced-foreground': 'hsl(var(--level-advanced-foreground))'
+				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'

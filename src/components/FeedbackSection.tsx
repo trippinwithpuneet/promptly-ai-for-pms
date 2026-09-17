@@ -165,9 +165,9 @@ export const FeedbackSection = () => {
 
                 {/* Feedback */}
                 <div className="space-y-2">
-                  <Label htmlFor="feedback">Your Feedback *</Label>
+                  <Label htmlFor="feedback-message">Your Feedback *</Label>
                   <Textarea
-                    id="feedback"
+                    id="feedback-message"
                     value={formData.feedback}
                     onChange={(e) => setFormData(prev => ({ ...prev, feedback: e.target.value }))}
                     placeholder="Share your thoughts, suggestions, or report issues..."

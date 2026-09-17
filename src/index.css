@@ -53,6 +53,13 @@
     
     --info: 151 42% 88%;
     --info-foreground: 160 72% 16%;
+
+    --level-beginner: 157 68% 24%;
+    --level-beginner-foreground: 60 20% 99%;
+    --level-intermediate: 38 90% 44%;
+    --level-intermediate-foreground: 38 100% 10%;
+    --level-advanced: 0 68% 48%;
+    --level-advanced-foreground: 0 0% 100%;
     
     /* Premium shadows and effects */
     --shadow-subtle: 0 2px 8px 0 hsl(80 12% 8% / 0.08);
@@ -108,6 +115,12 @@
     --success-foreground: 0 0% 98%;
     --info: 79 45% 16%;
     --info-foreground: 79 87% 70%;
+    --level-beginner: 150 65% 42%;
+    --level-beginner-foreground: 90 11% 4%;
+    --level-intermediate: 45 92% 58%;
+    --level-intermediate-foreground: 45 100% 9%;
+    --level-advanced: 0 78% 62%;
+    --level-advanced-foreground: 0 0% 100%;
     --shadow-subtle: 0 2px 8px 0 hsl(0 0% 0% / 0.3);
     --shadow-card: 0 20px 50px -12px hsl(0 0% 0% / 0.4), 0 8px 16px -4px hsl(0 0% 0% / 0.3);
     --shadow-glow: 0 0 24px hsl(var(--primary) / 0.16), 0 0 54px hsl(var(--primary) / 0.08);
