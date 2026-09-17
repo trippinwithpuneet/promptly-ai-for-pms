@@ -242,7 +242,7 @@ export const GlossarySection = () => {
                   <Star className="h-5 w-5" />
                   <span className="text-sm font-semibold uppercase">Featured this visit</span>
                 </div>
-                <Badge className={difficultyColors[featuredTerm.difficulty_level as keyof typeof difficultyColors]}>
+                <Badge className="border-primary-foreground bg-primary-foreground text-primary">
                   {featuredTerm.difficulty_level}
                 </Badge>
               </div>
