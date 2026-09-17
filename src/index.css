@@ -2,20 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Promptly design system — warm paper, obsidian and electric lime */
+/* Promptly design system — warm paper, forest green and obsidian */
 
 @layer base {
   :root {
     --background: 60 18% 96%;
     --foreground: 80 12% 8%;
     
-    --primary: 79 87% 59%;
-    --primary-light: 79 90% 70%;
-    --primary-dark: 79 72% 45%;
-    --primary-foreground: 80 12% 8%;
+    --primary: 157 68% 24%;
+    --primary-light: 151 42% 88%;
+    --primary-dark: 160 72% 16%;
+    --primary-foreground: 60 20% 99%;
     
     --ai-purple: 280 42% 43%;
-    --ai-cyan: 79 87% 59%;
+    --ai-cyan: 157 68% 24%;
     --ai-emerald: 142 45% 56%;
     --ai-gold: 48 85% 62%;
     
@@ -37,8 +37,8 @@
     --muted: 65 14% 91%;
     --muted-foreground: 70 7% 38%;
 
-    --accent: 79 87% 59%;
-    --accent-foreground: 80 12% 8%;
+    --accent: 151 42% 88%;
+    --accent-foreground: 160 72% 16%;
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 98%;
@@ -51,8 +51,8 @@
     --success: 150 55% 38%;
     --success-foreground: 0 0% 98%;
     
-    --info: 79 62% 88%;
-    --info-foreground: 83 70% 25%;
+    --info: 151 42% 88%;
+    --info-foreground: 160 72% 16%;
     
     /* Premium shadows and effects */
     --shadow-subtle: 0 2px 8px 0 hsl(80 12% 8% / 0.08);
