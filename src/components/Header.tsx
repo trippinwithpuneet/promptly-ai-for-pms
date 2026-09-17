@@ -1,8 +1,16 @@
 import { Button } from "@/components/ui/button";
-import { BookOpen, Zap, ScanSearch, GraduationCap } from "lucide-react";
+import { BookOpen, Zap, ScanSearch, GraduationCap, Moon, Sun } from "lucide-react";
 import { BrandMark } from "@/components/BrandMark";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export const Header = () => {
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -15,6 +23,7 @@ export const Header = () => {
       <div className="container flex h-20 items-center justify-between">
         <BrandMark compact />
         
+        <div className="flex items-center gap-2">
         <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
           <Button 
             variant="ghost" 
@@ -49,6 +58,28 @@ export const Header = () => {
             Daily nuggets
           </Button>
         </nav>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-10 w-10 shrink-0"
+                aria-label={resolvedTheme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+                onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+                disabled={!mounted}
+              >
+                {mounted && resolvedTheme === "light" ? (
+                  <Moon className="h-4 w-4" />
+                ) : (
+                  <Sun className="h-4 w-4" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              {resolvedTheme === "light" ? "Use dark mode" : "Use light mode"}
+            </TooltipContent>
+          </Tooltip>
+        </div>
       </div>
     </header>
   );
