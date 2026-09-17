@@ -302,6 +302,8 @@ export const DailyNewsSection = () => {
                     size="sm"
                     className="w-8 h-8 p-0"
                     onClick={() => setCurrentNewsIndex(idx)}
+                    aria-label={`Go to story ${idx + 1}`}
+                    aria-current={idx === currentNewsIndex ? "true" : undefined}
                   >
                     {idx + 1}
                   </Button>
