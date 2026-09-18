@@ -226,13 +226,24 @@ export const GlossarySection = () => {
   const normalizedSearch = searchTerm.trim().toLowerCase();
   const generatedTerm = generatedTerms[normalizedSearch];
 
+  const readCachedTerm = (key: string) => {
+    try {
+      const cached = window.sessionStorage.getItem(`promptly-jargon-${key}`);
+      return cached ? JSON.parse(cached) as GlossaryTerm : null;
+    } catch {
+      return null;
+    }
+  };
+
   const explainUnknownTerm = async (event: FormEvent) => {
     event.preventDefault();
     const term = searchTerm.trim();
     if (!term || filteredTerms.length > 0 || isExplaining) return;
 
-    if (generatedTerm) {
-      setSelectedTerm(generatedTerm);
+    const cachedTerm = generatedTerm ?? readCachedTerm(normalizedSearch);
+    if (cachedTerm) {
+      setGeneratedTerms((current) => ({ ...current, [normalizedSearch]: cachedTerm }));
+      setSelectedTerm(cachedTerm);
       return;
     }
 
@@ -271,6 +282,11 @@ export const GlossarySection = () => {
       is_featured: false,
     };
     setGeneratedTerms((current) => ({ ...current, [normalizedSearch]: explanation }));
+    try {
+      window.sessionStorage.setItem(`promptly-jargon-${normalizedSearch}`, JSON.stringify(explanation));
+    } catch {
+      // The explanation still works when browser storage is unavailable.
+    }
     setSelectedTerm(explanation);
   };
 
