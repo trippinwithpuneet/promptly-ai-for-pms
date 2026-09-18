@@ -16,3 +16,4 @@
 - [x] Add a persistent light mode with a header theme toggle.
 - [x] Improve glossary tag contrast in light mode while preserving the original dark-mode styling.
 - [x] Confirm all current changes are synced to GitHub.
+- [x] Keep dark mode as the first-visit default and add live explanations for unknown AI jargon.
