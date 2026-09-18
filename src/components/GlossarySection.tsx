@@ -2,8 +2,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Search, Star, ChevronRight, Lightbulb, ThumbsUp, ThumbsDown, RefreshCw, GraduationCap, ArrowUpRight } from "lucide-react";
-import { useState } from "react";
+import { AlertCircle, ArrowUpRight, BookOpen, ChevronRight, GraduationCap, Lightbulb, Loader2, RefreshCw, Search, Sparkles, Star, ThumbsDown, ThumbsUp } from "lucide-react";
+import { FormEvent, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface GlossaryTerm {
   id: string;
@@ -175,6 +176,10 @@ const difficultyColors = {
 export const GlossarySection = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTerm, setSelectedTerm] = useState<GlossaryTerm | null>(null);
+  const [generatedTerms, setGeneratedTerms] = useState<Record<string, GlossaryTerm>>({});
+  const [isExplaining, setIsExplaining] = useState(false);
+  const [explanationError, setExplanationError] = useState("");
+  const [nonAiTerm, setNonAiTerm] = useState("");
 
   const getTermsForVisit = () => {
     const storageKey = "promptly-last-glossary-terms";
@@ -218,6 +223,56 @@ export const GlossarySection = () => {
     term.simple_explanation.toLowerCase().includes(searchTerm.toLowerCase()) ||
     term.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const generatedTerm = generatedTerms[normalizedSearch];
+
+  const explainUnknownTerm = async (event: FormEvent) => {
+    event.preventDefault();
+    const term = searchTerm.trim();
+    if (!term || filteredTerms.length > 0 || isExplaining) return;
+
+    if (generatedTerm) {
+      setSelectedTerm(generatedTerm);
+      return;
+    }
+
+    setIsExplaining(true);
+    setExplanationError("");
+    setNonAiTerm("");
+
+    const { data, error } = await supabase.functions.invoke("explain-jargon", {
+      body: { term },
+    });
+    setIsExplaining(false);
+
+    if (error || !data) {
+      setExplanationError(error?.message || "Jargon Buster could not respond. Please try again.");
+      return;
+    }
+    if (data.error) {
+      setExplanationError(data.error);
+      return;
+    }
+    if (!data.isAiRelated) {
+      setNonAiTerm(term);
+      return;
+    }
+
+    const explanation: GlossaryTerm = {
+      id: `generated-${normalizedSearch}`,
+      term: data.term || term,
+      simple_explanation: data.simpleExplanation,
+      detailed_explanation: data.detailedExplanation,
+      benefits: data.benefits,
+      drawbacks: data.drawbacks,
+      alternatives: data.alternatives,
+      category: data.category,
+      difficulty_level: data.difficultyLevel,
+      is_featured: false,
+    };
+    setGeneratedTerms((current) => ({ ...current, [normalizedSearch]: explanation }));
+    setSelectedTerm(explanation);
+  };
 
   return (
     <section id="glossary" className="border-b border-border/70 bg-muted/30 py-20 md:py-28">
@@ -263,16 +318,45 @@ export const GlossarySection = () => {
         </div>
 
         {/* Search */}
-        <div className="mb-8">
-          <div className="relative max-w-xl">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+        <div className="mb-8 max-w-xl">
+          <form onSubmit={explainUnknownTerm} className="flex gap-2">
+            <div className="relative min-w-0 flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search AI terms..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setExplanationError("");
+                setNonAiTerm("");
+              }}
               className="pl-10"
             />
-          </div>
+            </div>
+            {normalizedSearch && filteredTerms.length === 0 && (
+              <Button type="submit" disabled={isExplaining} className="shrink-0">
+                {isExplaining ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                Explain
+              </Button>
+            )}
+          </form>
+          {normalizedSearch && filteredTerms.length === 0 && !nonAiTerm && !explanationError && (
+            <p className="mt-3 text-sm text-muted-foreground">
+              Not in our glossary yet. Ask Promptly to explain it now.
+            </p>
+          )}
+          {nonAiTerm && (
+            <div className="mt-3 flex items-start gap-2 border border-border bg-card p-3 text-sm text-muted-foreground">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              “{nonAiTerm}” doesn’t appear to be an AI term. Try an AI model, technique, tool, or concept.
+            </div>
+          )}
+          {explanationError && (
+            <div className="mt-3 flex items-start gap-2 border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+              {explanationError}
+            </div>
+          )}
         </div>
 
         {/* Terms Grid */}
@@ -308,6 +392,28 @@ export const GlossarySection = () => {
               </CardContent>
             </Card>
           ))}
+          {generatedTerm && filteredTerms.length === 0 && (
+            <Card
+              className="cursor-pointer border-primary/40 bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-card"
+              onClick={() => setSelectedTerm(generatedTerm)}
+            >
+              <CardHeader>
+                <div className="mb-2 flex items-start justify-between gap-3">
+                  <CardTitle className="text-lg">{generatedTerm.term}</CardTitle>
+                  <Badge className={difficultyColors[generatedTerm.difficulty_level as keyof typeof difficultyColors]}>
+                    {generatedTerm.difficulty_level}
+                  </Badge>
+                </div>
+                <Badge variant="outline" className="w-fit">{generatedTerm.category}</Badge>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="line-clamp-3 text-sm">{generatedTerm.simple_explanation}</CardDescription>
+                <Button variant="ghost" size="sm" className="mt-3 h-auto p-0 text-foreground hover:bg-transparent hover:text-primary">
+                  Learn more <ChevronRight className="ml-1 h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         <div id="course" className="relative mt-14 scroll-mt-24 overflow-hidden border-y border-primary bg-primary px-6 py-10 text-primary-foreground shadow-glow md:px-10 md:py-14">
