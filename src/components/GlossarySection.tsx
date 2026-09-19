@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, ArrowUpRight, BookOpen, ChevronRight, GraduationCap, Lightbulb, Loader2, RefreshCw, Search, Sparkles, Star, ThumbsDown, ThumbsUp } from "lucide-react";
 import { FormEvent, useState } from "react";
+import { FunctionsHttpError } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
 interface GlossaryTerm {
@@ -173,6 +174,19 @@ const difficultyColors = {
   advanced: "border-level-advanced bg-level-advanced text-level-advanced-foreground"
 };
 
+const readExplanationError = async (error: unknown) => {
+  if (error instanceof FunctionsHttpError) {
+    try {
+      const body = await error.context.json() as { error?: unknown };
+      if (typeof body.error === "string" && body.error.trim()) return body.error;
+    } catch {
+      // Fall through to the visitor-friendly fallback.
+    }
+  }
+
+  return "Jargon Buster could not respond. Please try again.";
+};
+
 export const GlossarySection = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTerm, setSelectedTerm] = useState<GlossaryTerm | null>(null);
@@ -256,8 +270,12 @@ export const GlossarySection = () => {
     });
     setIsExplaining(false);
 
-    if (error || !data) {
-      setExplanationError(error?.message || "Jargon Buster could not respond. Please try again.");
+    if (error) {
+      setExplanationError(await readExplanationError(error));
+      return;
+    }
+    if (!data) {
+      setExplanationError("Jargon Buster could not respond. Please try again.");
       return;
     }
     if (data.error) {
